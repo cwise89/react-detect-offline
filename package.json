@@ -1,6 +1,6 @@
 {
   "name": "react-detect-offline",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Offline and Online components for React",
   "main": "index.js",
   "repository": {
