@@ -1,0 +1,12 @@
+{
+  "name": "react-detect-offline",
+  "version": "1.0.0",
+  "description": "Offline and Online components for React",
+  "main": "index.js",
+  "repository": "https://github.com/chrisbolin/react-detect-offline",
+  "author": "Chris Bolin",
+  "license": "MIT",
+  "devDependencies": {
+    "react": "^15.6.1"
+  }
+}
