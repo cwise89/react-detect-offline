@@ -1,5 +1,4 @@
 [![npm](https://img.shields.io/npm/v/react-detect-offline.svg)](https://www.npmjs.com/package/react-detect-offline)
-[![npm](https://img.shields.io/npm/l/react-detect-offline.svg)]()
 ![gzip size](http://img.badgesize.io/https://unpkg.com/react-detect-offline?compression=gzip&label=gzip%20size)
 ![size](http://img.badgesize.io/https://unpkg.com/react-detect-offline?label=size)
 ![badges](https://img.shields.io/badge/badges-5-lightgrey.svg)
