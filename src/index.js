@@ -10,7 +10,6 @@ class Base extends Component {
     // bind event handlers
     this.goOnline = this.goOnline.bind(this);
     this.goOffline = this.goOffline.bind(this);
-    this.handleDebugKeydown = this.handleDebugKeydown.bind(this);
   }
   renderChildren() {
     const { children } = this.props;
@@ -43,23 +42,13 @@ class Base extends Component {
   goOffline() {
     this.setState({ online: false });
   }
-  handleDebugKeydown({ keyCode, shiftKey, metaKey }) {
-    if (keyCode === 48 && shiftKey && metaKey) {
-      this.setState({ online: !this.state.online });
-    }
-  }
   componentDidMount() {
     window.addEventListener('online', this.goOnline);
     window.addEventListener('offline', this.goOffline);
-
-    if (parseInt(window.location.port) >= 1024) {
-      window.addEventListener('keydown', this.handleDebugKeydown);
-    }
   }
   componentWillUnmount() {
     window.removeEventListener('online', this.goOnline);
     window.removeEventListener('offline', this.goOffline);
-    window.removeEventListener('keydown', this.handleDebugKeydown);
   }
 }
 

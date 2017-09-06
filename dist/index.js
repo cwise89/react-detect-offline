@@ -36,7 +36,6 @@ var Base = function (_Component) {
     // bind event handlers
     _this.goOnline = _this.goOnline.bind(_this);
     _this.goOffline = _this.goOffline.bind(_this);
-    _this.handleDebugKeydown = _this.handleDebugKeydown.bind(_this);
     return _this;
   }
 
@@ -83,32 +82,16 @@ var Base = function (_Component) {
       this.setState({ online: false });
     }
   }, {
-    key: 'handleDebugKeydown',
-    value: function handleDebugKeydown(_ref) {
-      var keyCode = _ref.keyCode,
-          shiftKey = _ref.shiftKey,
-          metaKey = _ref.metaKey;
-
-      if (keyCode === 48 && shiftKey && metaKey) {
-        this.setState({ online: !this.state.online });
-      }
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.addEventListener('online', this.goOnline);
       window.addEventListener('offline', this.goOffline);
-
-      if (parseInt(window.location.port) >= 1024) {
-        window.addEventListener('keydown', this.handleDebugKeydown);
-      }
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       window.removeEventListener('online', this.goOnline);
       window.removeEventListener('offline', this.goOffline);
-      window.removeEventListener('keydown', this.handleDebugKeydown);
     }
   }]);
 
