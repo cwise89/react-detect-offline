@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Offline should remove event listeners when unmounting 1`] = `
+Array [
+  Array [
+    "online",
+    [Function],
+  ],
+  Array [
+    "offline",
+    [Function],
+  ],
+  Array [
+    "keydown",
+    [Function],
+  ],
+]
+`;
+
+exports[`Offline should render children when offline 1`] = `
+<Offline>
+  <h1>
+    Hello World
+  </h1>
+</Offline>
+`;
+
+exports[`Online should remove event listeners when unmounting 1`] = `
+Array [
+  Array [
+    "online",
+    [Function],
+  ],
+  Array [
+    "offline",
+    [Function],
+  ],
+  Array [
+    "keydown",
+    [Function],
+  ],
+]
+`;
+
+exports[`Online should render children when online 1`] = `
+<Online>
+  <h1>
+    Hello World
+  </h1>
+</Online>
+`;
