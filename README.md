@@ -1,7 +1,6 @@
 [![npm](https://img.shields.io/npm/v/react-detect-offline.svg)](https://www.npmjs.com/package/react-detect-offline)
 ![gzip size](http://img.badgesize.io/https://unpkg.com/react-detect-offline?compression=gzip&label=gzip%20size)
-![size](http://img.badgesize.io/https://unpkg.com/react-detect-offline?label=size)
-![badges](https://img.shields.io/badge/badges-5-lightgrey.svg)
+![badges](https://img.shields.io/badge/badges-3-lightgrey.svg)
 
 ### Offline and Online components for React
 
