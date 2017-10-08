@@ -38,11 +38,18 @@ class Base extends Component {
     return createElement(wrapperType, {}, ...childrenArray);
   }
   goOnline() {
+		this.callOnChangeHandler(true);
     this.setState({ online: true });
   }
   goOffline() {
+		this.callOnChangeHandler(false);
     this.setState({ online: false });
   }
+	callOnChangeHandler(online) {
+		if (this.props.onChange) {
+			this.props.onChange(online);
+		}
+	}
   handleDebugKeydown({ keyCode, shiftKey, metaKey }) {
     if (keyCode === 48 && shiftKey && metaKey) {
       this.setState({ online: !this.state.online });
@@ -72,5 +79,11 @@ export class Online extends Base {
 export class Offline extends Base {
   render() {
     return !this.state.online ? this.renderChildren() : null;
+  }
+}
+
+export class Detector extends Base {
+  render() {
+    return this.props.render({ online: this.state.online });
   }
 }
