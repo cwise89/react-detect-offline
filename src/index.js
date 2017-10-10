@@ -1,4 +1,5 @@
-import React, { Component, isValidElement, Children, createElement } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 // base class that detects offline/online changes
 class Base extends Component {
@@ -10,31 +11,6 @@ class Base extends Component {
     // bind event handlers
     this.goOnline = this.goOnline.bind(this);
     this.goOffline = this.goOffline.bind(this);
-  }
-  renderChildren() {
-    const { children } = this.props;
-    let { wrapperType } = this.props;
-
-    // usual case: one child that is a react Element
-    if (React.isValidElement(children)) { return children; }
-
-    // no children
-    if (!children) { return null; }
-
-    // string children, multiple children, or something else
-    const childrenArray = Children.toArray(children);
-    const firstChild = childrenArray[0];
-    // use wrapperType if specified
-    if (!wrapperType) {
-      if (typeof firstChild === 'string' || firstChild.type === 'span') {
-        // use span for string or span children
-        wrapperType = 'span';
-      } else {
-        // fallback on div
-        wrapperType = 'div';
-      }
-    }
-    return createElement(wrapperType, {}, ...childrenArray);
   }
   goOnline() {
 		this.callOnChangeHandler(true);
@@ -59,15 +35,19 @@ class Base extends Component {
   }
 }
 
+Base.propTypes = {
+  children: PropTypes.element.isRequired
+};
+
 export class Online extends Base {
   render() {
-    return this.state.online ? this.renderChildren() : null;
+    return this.state.online && this.props.children;
   }
 }
 
 export class Offline extends Base {
   render() {
-    return !this.state.online ? this.renderChildren() : null;
+    return !this.state.online && this.props.children;
   }
 }
 
