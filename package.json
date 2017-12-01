@@ -21,11 +21,5 @@
   "scripts": {
     "compile": "babel --presets es2015 -d dist/ src/"
   },
-  "keywords": [
-    "react",
-    "offline",
-    "online",
-    "detect",
-    "disconnect"
-  ]
+  "keywords": ["react", "offline", "online", "detect", "disconnect"]
 }
