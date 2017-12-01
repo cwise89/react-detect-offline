@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Offline = exports.Online = undefined;
+exports.Detector = exports.Offline = exports.Online = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -21,7 +21,45 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var unsupportedUserAgentsPattern = /Windows.*Chrome/;
+
+var config = {
+  poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  url: "https://ipv4.icanhazip.com/",
+  timeout: 5000,
+  interval: 5000
+};
+
+var ping = function ping(config) {
+  return new Promise(function (resolve, reject) {
+    var isOnline = function isOnline() {
+      return resolve(true);
+    };
+    var isOffline = function isOffline() {
+      return resolve(false);
+    };
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onerror = isOffline;
+    xhr.ontimeout = isOffline;
+    xhr.onload = function () {
+      var response = xhr.responseText.trim();
+      if (!response) {
+        isOffline();
+      } else {
+        isOnline();
+      }
+    };
+
+    xhr.open("GET", config.url);
+    xhr.timeout = config.url;
+    xhr.send();
+  });
+};
+
 // base class that detects offline/online changes
+
 var Base = function (_Component) {
   _inherits(Base, _Component);
 
@@ -31,17 +69,16 @@ var Base = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Base.__proto__ || Object.getPrototypeOf(Base)).call(this));
 
     _this.state = {
-      online: navigator.onLine
+      online: typeof navigator.onLine === "boolean" ? navigator.onLine : true
     };
     // bind event handlers
     _this.goOnline = _this.goOnline.bind(_this);
     _this.goOffline = _this.goOffline.bind(_this);
-    _this.handleDebugKeydown = _this.handleDebugKeydown.bind(_this);
     return _this;
   }
 
   _createClass(Base, [{
-    key: 'renderChildren',
+    key: "renderChildren",
     value: function renderChildren() {
       var children = this.props.children;
       var wrapperType = this.props.wrapperType;
@@ -62,53 +99,74 @@ var Base = function (_Component) {
       var firstChild = childrenArray[0];
       // use wrapperType if specified
       if (!wrapperType) {
-        if (typeof firstChild === 'string' || firstChild.type === 'span') {
+        if (typeof firstChild === "string" || firstChild.type === "span") {
           // use span for string or span children
-          wrapperType = 'span';
+          wrapperType = "span";
         } else {
           // fallback on div
-          wrapperType = 'div';
+          wrapperType = "div";
         }
       }
       return _react.createElement.apply(undefined, [wrapperType, {}].concat(_toConsumableArray(childrenArray)));
     }
   }, {
-    key: 'goOnline',
+    key: "goOnline",
     value: function goOnline() {
-      this.setState({ online: true });
+      if (!this.state.online) {
+        this.callOnChangeHandler(true);
+        this.setState({ online: true });
+      }
     }
   }, {
-    key: 'goOffline',
+    key: "goOffline",
     value: function goOffline() {
-      this.setState({ online: false });
-    }
-  }, {
-    key: 'handleDebugKeydown',
-    value: function handleDebugKeydown(_ref) {
-      var keyCode = _ref.keyCode,
-          shiftKey = _ref.shiftKey,
-          metaKey = _ref.metaKey;
-
-      if (keyCode === 48 && shiftKey && metaKey) {
-        this.setState({ online: !this.state.online });
+      if (this.state.online) {
+        this.callOnChangeHandler(false);
+        this.setState({ online: false });
       }
     }
   }, {
-    key: 'componentDidMount',
+    key: "callOnChangeHandler",
+    value: function callOnChangeHandler(online) {
+      if (this.props.onChange) {
+        this.props.onChange(online);
+      }
+    }
+  }, {
+    key: "startPolling",
+    value: function startPolling() {
+      var _this2 = this;
+
+      this.pollingId = setInterval(function () {
+        ping(config).then(function (online) {
+          online ? _this2.goOnline() : _this2.goOffline();
+        });
+      }, config.interval);
+    }
+  }, {
+    key: "stopPolling",
+    value: function stopPolling() {
+      clearInterval(this.pollingId);
+    }
+  }, {
+    key: "componentDidMount",
     value: function componentDidMount() {
-      window.addEventListener('online', this.goOnline);
-      window.addEventListener('offline', this.goOffline);
+      window.addEventListener("online", this.goOnline);
+      window.addEventListener("offline", this.goOffline);
 
-      if (parseInt(window.location.port) >= 1024) {
-        window.addEventListener('keydown', this.handleDebugKeydown);
+      if (config.poll) {
+        this.startPolling();
       }
     }
   }, {
-    key: 'componentWillUnmount',
+    key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      window.removeEventListener('online', this.goOnline);
-      window.removeEventListener('offline', this.goOffline);
-      window.removeEventListener('keydown', this.handleDebugKeydown);
+      window.removeEventListener("online", this.goOnline);
+      window.removeEventListener("offline", this.goOffline);
+
+      if (config.poll) {
+        this.stopPolling();
+      }
     }
   }]);
 
@@ -125,7 +183,7 @@ var Online = exports.Online = function (_Base) {
   }
 
   _createClass(Online, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return this.state.online ? this.renderChildren() : null;
     }
@@ -144,11 +202,30 @@ var Offline = exports.Offline = function (_Base2) {
   }
 
   _createClass(Offline, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return !this.state.online ? this.renderChildren() : null;
     }
   }]);
 
   return Offline;
+}(Base);
+
+var Detector = exports.Detector = function (_Base3) {
+  _inherits(Detector, _Base3);
+
+  function Detector() {
+    _classCallCheck(this, Detector);
+
+    return _possibleConstructorReturn(this, (Detector.__proto__ || Object.getPrototypeOf(Detector)).apply(this, arguments));
+  }
+
+  _createClass(Detector, [{
+    key: "render",
+    value: function render() {
+      return this.props.render({ online: this.state.online });
+    }
+  }]);
+
+  return Detector;
 }(Base);
