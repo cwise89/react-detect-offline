@@ -1,5 +1,11 @@
 .App {
+  height: 100%;
   padding: 20px;
   font-size: 40px;
   text-align: center;
+}
+
+.App.Offline {
+  color: pink;
+  background-color: black;
 }

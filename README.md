@@ -24,9 +24,9 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 ### API
 
-`<Online>` - Component that renders its children only when  the browser is online.
+`<Online/>` - Component that renders its children only when  the browser is online.
 
-`<Offline>` - Component that renders its children only when the browser is not online.
+`<Offline/>` - Component that renders its children only when the browser is not online.
 
 **Note:** `Online` and `Offline` are mutually exclusive; if one is rendering, the other will not be.
 
