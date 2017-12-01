@@ -5,12 +5,23 @@ import React, {
   createElement
 } from "react";
 
+import ping from "./ping";
+
+const unsupportedUserAgentsPattern = /Windows.*Chrome/;
+
+const config = {
+  poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  url: "https://ipv4.icanhazip.com/",
+  timeout: 5000,
+  interval: 5000
+};
+
 // base class that detects offline/online changes
 class Base extends Component {
   constructor() {
     super();
     this.state = {
-      online: navigator.onLine
+      online: typeof navigator.onLine === "boolean" ? navigator.onLine : true
     };
     // bind event handlers
     this.goOnline = this.goOnline.bind(this);
@@ -45,26 +56,55 @@ class Base extends Component {
     }
     return createElement(wrapperType, {}, ...childrenArray);
   }
+
   goOnline() {
-    this.callOnChangeHandler(true);
-    this.setState({ online: true });
+    if (!this.state.online) {
+      this.callOnChangeHandler(true);
+      this.setState({ online: true });
+    }
   }
+
   goOffline() {
-    this.callOnChangeHandler(false);
-    this.setState({ online: false });
+    if (this.state.online) {
+      this.callOnChangeHandler(false);
+      this.setState({ online: false });
+    }
   }
+
   callOnChangeHandler(online) {
     if (this.props.onChange) {
       this.props.onChange(online);
     }
   }
+
+  startPolling() {
+    this.pollingId = setInterval(() => {
+      ping(config).then(online => {
+        online ? this.goOnline() : this.goOffline();
+      });
+    }, config.interval);
+  }
+
+  stopPolling() {
+    clearInterval(this.pollingId);
+  }
+
   componentDidMount() {
     window.addEventListener("online", this.goOnline);
     window.addEventListener("offline", this.goOffline);
+
+    if (config.poll) {
+      this.startPolling();
+    }
   }
+
   componentWillUnmount() {
     window.removeEventListener("online", this.goOnline);
     window.removeEventListener("offline", this.goOffline);
+
+    if (config.poll) {
+      this.stopPolling();
+    }
   }
 }
 
