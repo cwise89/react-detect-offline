@@ -21,7 +21,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var unsupportedUserAgentsPattern = /Windows.*Chrome/;
+// these browsers don't fully support navigator.onLine, so we need to use a polling backup
+var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox/;
 
 var config = {
   poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
@@ -81,7 +82,8 @@ var Base = function (_Component) {
     key: "renderChildren",
     value: function renderChildren() {
       var children = this.props.children;
-      var wrapperType = this.props.wrapperType;
+      var _props$wrapperType = this.props.wrapperType,
+          wrapperType = _props$wrapperType === undefined ? "span" : _props$wrapperType;
 
       // usual case: one child that is a react Element
 
@@ -97,16 +99,7 @@ var Base = function (_Component) {
       // string children, multiple children, or something else
       var childrenArray = _react.Children.toArray(children);
       var firstChild = childrenArray[0];
-      // use wrapperType if specified
-      if (!wrapperType) {
-        if (typeof firstChild === "string" || firstChild.type === "span") {
-          // use span for string or span children
-          wrapperType = "span";
-        } else {
-          // fallback on div
-          wrapperType = "div";
-        }
-      }
+
       return _react.createElement.apply(undefined, [wrapperType, {}].concat(_toConsumableArray(childrenArray)));
     }
   }, {
