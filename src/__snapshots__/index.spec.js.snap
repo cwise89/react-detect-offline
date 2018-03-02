@@ -10,10 +10,6 @@ Array [
     "offline",
     [Function],
   ],
-  Array [
-    "keydown",
-    [Function],
-  ],
 ]
 `;
 
@@ -33,10 +29,6 @@ Array [
   ],
   Array [
     "offline",
-    [Function],
-  ],
-  Array [
-    "keydown",
     [Function],
   ],
 ]

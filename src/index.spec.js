@@ -1,7 +1,7 @@
-import React from 'react';
-import { mount } from 'enzyme';
-import toJSON from 'enzyme-to-json';
-import { Online, Offline } from './';
+import React from "react";
+import { mount } from "enzyme";
+import toJSON from "enzyme-to-json";
+import { Online, Offline } from "./";
 
 const eventListenerMap = {};
 beforeEach(() => {
@@ -13,15 +13,15 @@ beforeEach(() => {
   });
 });
 
-describe('Online', () => {
+describe("Online", () => {
   beforeEach(() => {
-    Object.defineProperty(navigator, 'onLine', {
+    Object.defineProperty(navigator, "onLine", {
       configurable: true,
       value: true
     });
   });
 
-  it('should render children when online', () => {
+  it("should render children when online", () => {
     const wrapper = mount(
       <Online>
         <h1>Hello World</h1>
@@ -31,8 +31,8 @@ describe('Online', () => {
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
-  it('should not render children when offline', () => {
-    Object.defineProperty(navigator, 'onLine', { value: false });
+  it("should not render children when offline", () => {
+    Object.defineProperty(navigator, "onLine", { value: false });
 
     const wrapper = mount(
       <Online>
@@ -43,7 +43,7 @@ describe('Online', () => {
     expect(wrapper.html()).toBeNull();
   });
 
-  it('should not render children when going from online to offline', () => {
+  it("should not render children when going from online to offline", () => {
     const wrapper = mount(
       <Online>
         <h1>Hello World</h1>
@@ -55,7 +55,7 @@ describe('Online', () => {
     expect(wrapper.html()).toBeNull();
   });
 
-  it('should remove event listeners when unmounting', () => {
+  it("should remove event listeners when unmounting", () => {
     const wrapper = mount(
       <Online>
         <h1>Hello World</h1>
@@ -63,20 +63,20 @@ describe('Online', () => {
     );
     wrapper.unmount();
 
-    expect(window.removeEventListener).toHaveBeenCalledTimes(3);
+    expect(window.removeEventListener).toHaveBeenCalledTimes(2);
     expect(window.removeEventListener.mock.calls).toMatchSnapshot();
   });
 });
 
-describe('Offline', () => {
+describe("Offline", () => {
   beforeEach(() => {
-    Object.defineProperty(navigator, 'onLine', {
+    Object.defineProperty(navigator, "onLine", {
       configurable: true,
       value: false
     });
   });
 
-  it('should render children when offline', () => {
+  it("should render children when offline", () => {
     const wrapper = mount(
       <Offline>
         <h1>Hello World</h1>
@@ -86,8 +86,8 @@ describe('Offline', () => {
     expect(toJSON(wrapper)).toMatchSnapshot();
   });
 
-  it('should not render children when online', () => {
-    Object.defineProperty(navigator, 'onLine', { value: true });
+  it("should not render children when online", () => {
+    Object.defineProperty(navigator, "onLine", { value: true });
 
     const wrapper = mount(
       <Offline>
@@ -98,7 +98,7 @@ describe('Offline', () => {
     expect(wrapper.html()).toBeNull();
   });
 
-  it('should not render children when going from offline to online', () => {
+  it("should not render children when going from offline to online", () => {
     const wrapper = mount(
       <Offline>
         <h1>Hello World</h1>
@@ -110,7 +110,7 @@ describe('Offline', () => {
     expect(wrapper.html()).toBeNull();
   });
 
-  it('should remove event listeners when unmounting', () => {
+  it("should remove event listeners when unmounting", () => {
     const wrapper = mount(
       <Offline>
         <h1>Hello World</h1>
@@ -118,7 +118,7 @@ describe('Offline', () => {
     );
     wrapper.unmount();
 
-    expect(window.removeEventListener).toHaveBeenCalledTimes(3);
+    expect(window.removeEventListener).toHaveBeenCalledTimes(2);
     expect(window.removeEventListener.mock.calls).toMatchSnapshot();
   });
 });
