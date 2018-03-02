@@ -50,9 +50,10 @@ class Base extends Component {
     this.goOnline = this.goOnline.bind(this);
     this.goOffline = this.goOffline.bind(this);
   }
+
   renderChildren() {
     const { children } = this.props;
-    let { wrapperType } = this.props;
+    const { wrapperType = "span" } = this.props;
 
     // usual case: one child that is a react Element
     if (React.isValidElement(children)) {
@@ -67,16 +68,7 @@ class Base extends Component {
     // string children, multiple children, or something else
     const childrenArray = Children.toArray(children);
     const firstChild = childrenArray[0];
-    // use wrapperType if specified
-    if (!wrapperType) {
-      if (typeof firstChild === "string" || firstChild.type === "span") {
-        // use span for string or span children
-        wrapperType = "span";
-      } else {
-        // fallback on div
-        wrapperType = "div";
-      }
-    }
+
     return createElement(wrapperType, {}, ...childrenArray);
   }
 
