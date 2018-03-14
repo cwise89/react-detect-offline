@@ -6,7 +6,7 @@ import React, {
 } from "react";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
-const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox/;
+const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
 const config = {
   poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
