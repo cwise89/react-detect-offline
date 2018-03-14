@@ -22,7 +22,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
-var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox/;
+var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
 var config = {
   poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
