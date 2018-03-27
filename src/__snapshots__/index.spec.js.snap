@@ -14,7 +14,21 @@ Array [
 `;
 
 exports[`Offline should render children when offline 1`] = `
-<Offline>
+<Offline
+  pollingInterval={5000}
+  pollingUrl="https://ipv4.icanhazip.com/"
+>
+  <h1>
+    Hello World
+  </h1>
+</Offline>
+`;
+
+exports[`Offline should render children when offline and using a custom polling URL 1`] = `
+<Offline
+  pollingInterval={5000}
+  pollingUrl="https://www.google.com/"
+>
   <h1>
     Hello World
   </h1>
@@ -35,7 +49,21 @@ Array [
 `;
 
 exports[`Online should render children when online 1`] = `
-<Online>
+<Online
+  pollingInterval={5000}
+  pollingUrl="https://ipv4.icanhazip.com/"
+>
+  <h1>
+    Hello World
+  </h1>
+</Online>
+`;
+
+exports[`Online should render children when online and using a custom polling URL 1`] = `
+<Online
+  pollingInterval={5000}
+  pollingUrl="https://www.google.com/"
+>
   <h1>
     Hello World
   </h1>
