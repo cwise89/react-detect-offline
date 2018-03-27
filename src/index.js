@@ -3,7 +3,9 @@ import React, {
   isValidElement,
   Children,
   createElement
-} from "react";
+}                 from "react";
+import PropTypes  from 'prop-types';
+
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
@@ -15,7 +17,19 @@ const config = {
   interval: 5000
 };
 
-const ping = config => {
+// Type check our Base component props
+const propTypes = {
+  pollingInterval: PropTypes.number,
+  pollingUrl: PropTypes.string,
+}
+
+// Define our Base component default props from config
+const defaultProps = {
+  pollingInterval: config.interval,
+  pollingUrl: config.url,
+}
+
+const ping = (pollingUrl) => {
   return new Promise((resolve, reject) => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
@@ -33,8 +47,8 @@ const ping = config => {
       }
     };
 
-    xhr.open("GET", config.url);
-    xhr.timeout = config.url;
+    xhr.open("GET", pollingUrl);
+    xhr.timeout = pollingUrl;
     xhr.send();
   });
 };
@@ -93,11 +107,22 @@ class Base extends Component {
   }
 
   startPolling() {
-    this.pollingId = setInterval(() => {
-      ping(config).then(online => {
-        online ? this.goOnline() : this.goOffline();
-      });
-    }, config.interval);
+    const {
+      pollingInterval,
+      pollingUrl
+    } = this.props;
+    
+    if (pollingUrl) {
+      this.pollingId = setInterval(() => {
+        ping(pollingUrl).then(online => {
+          online ? this.goOnline() : this.goOffline();
+        });
+      }, pollingInterval);
+    } 
+    else {
+      console.warn(process.env);
+      console.warn('A pollingUrl must be defined in order to support browsers that do not properly implement offline events.');
+    }
   }
 
   stopPolling() {
@@ -122,6 +147,10 @@ class Base extends Component {
     }
   }
 }
+
+// Define propTypes and defaultProps at the top for better documentation
+Base.propTypes = propTypes;
+Base.defaultProps = defaultProps;
 
 export class Online extends Base {
   render() {
