@@ -120,7 +120,6 @@ class Base extends Component {
       }, pollingInterval);
     } 
     else {
-      console.warn(process.env);
       console.warn('A pollingUrl must be defined in order to support browsers that do not properly implement offline events.');
     }
   }
