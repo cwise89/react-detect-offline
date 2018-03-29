@@ -1,9 +1,4 @@
-import React, {
-  Component,
-  isValidElement,
-  Children,
-  createElement
-} from "react";
+import { Component, isValidElement, Children, createElement } from "react";
 import PropTypes from "prop-types";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
@@ -16,20 +11,8 @@ const config = {
   interval: 5000
 };
 
-// Type check our Base component props
-const propTypes = {
-  pollingInterval: PropTypes.number,
-  pollingUrl: PropTypes.string
-};
-
-// Define our Base component default props from config
-const defaultProps = {
-  pollingInterval: config.interval,
-  pollingUrl: config.url
-};
-
 const ping = pollingUrl => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
 
@@ -52,6 +35,20 @@ const ping = pollingUrl => {
   });
 };
 
+const propTypes = {
+  children: PropTypes.node,
+  onChange: PropTypes.func,
+  pollingInterval: PropTypes.number,
+  pollingUrl: PropTypes.string,
+  wrapperType: PropTypes.string
+};
+
+const defaultProps = {
+  pollingInterval: config.interval,
+  pollingUrl: config.url,
+  wrapperType: "span"
+};
+
 // base class that detects offline/online changes
 class Base extends Component {
   constructor() {
@@ -64,12 +61,29 @@ class Base extends Component {
     this.goOffline = this.goOffline.bind(this);
   }
 
+  componentDidMount() {
+    window.addEventListener("online", this.goOnline);
+    window.addEventListener("offline", this.goOffline);
+
+    if (config.poll) {
+      this.startPolling();
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("online", this.goOnline);
+    window.removeEventListener("offline", this.goOffline);
+
+    if (config.poll) {
+      this.stopPolling();
+    }
+  }
+
   renderChildren() {
-    const { children } = this.props;
-    const { wrapperType = "span" } = this.props;
+    const { children, wrapperType } = this.props;
 
     // usual case: one child that is a react Element
-    if (React.isValidElement(children)) {
+    if (isValidElement(children)) {
       return children;
     }
 
@@ -79,10 +93,7 @@ class Base extends Component {
     }
 
     // string children, multiple children, or something else
-    const childrenArray = Children.toArray(children);
-    const firstChild = childrenArray[0];
-
-    return createElement(wrapperType, {}, ...childrenArray);
+    return createElement(wrapperType, {}, ...Children.toArray(children));
   }
 
   goOnline() {
@@ -114,37 +125,13 @@ class Base extends Component {
           online ? this.goOnline() : this.goOffline();
         });
       }, pollingInterval);
-    } else {
-      console.warn(
-        "A pollingUrl must be defined in order to support browsers that do not properly implement offline events."
-      );
     }
   }
 
   stopPolling() {
     clearInterval(this.pollingId);
   }
-
-  componentDidMount() {
-    window.addEventListener("online", this.goOnline);
-    window.addEventListener("offline", this.goOffline);
-
-    if (config.poll) {
-      this.startPolling();
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("online", this.goOnline);
-    window.removeEventListener("offline", this.goOffline);
-
-    if (config.poll) {
-      this.stopPolling();
-    }
-  }
 }
-
-// Define propTypes and defaultProps at the top for better documentation
 Base.propTypes = propTypes;
 Base.defaultProps = defaultProps;
 
@@ -153,15 +140,21 @@ export class Online extends Base {
     return this.state.online ? this.renderChildren() : null;
   }
 }
+Online.propTypes = propTypes;
+Online.defaultProps = defaultProps;
 
 export class Offline extends Base {
   render() {
     return !this.state.online ? this.renderChildren() : null;
   }
 }
+Offline.propTypes = propTypes;
+Offline.defaultProps = defaultProps;
 
 export class Detector extends Base {
   render() {
     return this.props.render({ online: this.state.online });
   }
 }
+Detector.propTypes = propTypes;
+Detector.defaultProps = defaultProps;
