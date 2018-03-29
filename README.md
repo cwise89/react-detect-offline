@@ -45,7 +45,7 @@ The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_event
 
 ### Example Uses
 
- -Use `Offline` to remind users they might need to connect to complete certain actions.
- -Use `Online` to let readers know the page is available offline.
- -Use `Online` to hide links or other content that is irrelevant when offline.
- -idk, use your dang imagination.
+- Use `Offline` to remind users they might need to connect to complete certain actions.
+- Use `Online` to let readers know the page is available offline.
+- Use `Online` to hide links or other content that is irrelevant when offline.
+- idk, use your dang imagination.
