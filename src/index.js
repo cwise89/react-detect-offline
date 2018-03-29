@@ -3,9 +3,8 @@ import React, {
   isValidElement,
   Children,
   createElement
-}                 from "react";
-import PropTypes  from 'prop-types';
-
+} from "react";
+import PropTypes from "prop-types";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
@@ -20,16 +19,16 @@ const config = {
 // Type check our Base component props
 const propTypes = {
   pollingInterval: PropTypes.number,
-  pollingUrl: PropTypes.string,
-}
+  pollingUrl: PropTypes.string
+};
 
 // Define our Base component default props from config
 const defaultProps = {
   pollingInterval: config.interval,
-  pollingUrl: config.url,
-}
+  pollingUrl: config.url
+};
 
-const ping = (pollingUrl) => {
+const ping = pollingUrl => {
   return new Promise((resolve, reject) => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
@@ -107,20 +106,18 @@ class Base extends Component {
   }
 
   startPolling() {
-    const {
-      pollingInterval,
-      pollingUrl
-    } = this.props;
-    
+    const { pollingInterval, pollingUrl } = this.props;
+
     if (pollingUrl) {
       this.pollingId = setInterval(() => {
         ping(pollingUrl).then(online => {
           online ? this.goOnline() : this.goOffline();
         });
       }, pollingInterval);
-    } 
-    else {
-      console.warn('A pollingUrl must be defined in order to support browsers that do not properly implement offline events.');
+    } else {
+      console.warn(
+        "A pollingUrl must be defined in order to support browsers that do not properly implement offline events."
+      );
     }
   }
 

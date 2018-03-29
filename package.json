@@ -17,6 +17,7 @@
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
     "jest": "^21.0.1",
+    "prettier": "^1.11.1",
     "prop-types": "^15.6.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -27,8 +28,9 @@
   },
   "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
   "scripts": {
-    "compile": "babel src/index.js -o dist/index.js",
+    "build": "babel src/index.js -o dist/index.js",
     "test": "jest spec --watch",
+    "prettier": "prettier src/** --write",
     "test.cover": "jest spec --coverage"
   },
   "keywords": [
