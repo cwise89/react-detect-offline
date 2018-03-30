@@ -8,7 +8,7 @@
 Components that track [offline and online state](https://developer.mozilla.org/en-US/docs/Online_and_offline_events). Render certain content only when online (or only when offline).
 
 ```jsx
-import { Offline, Online } from 'react-detect-offline';
+import { Offline, Online } from "react-detect-offline";
 
 const App = () => (
   <div>
@@ -24,20 +24,30 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 ### API
 
-`<Online/>` - Component that renders its children only when  the browser is online.
+`<Online/>` - Component that renders its children only when the browser is online. _Recommended for simple use cases._
 
-`<Offline/>` - Component that renders its children only when the browser is not online.
+`<Offline/>` - Component that renders its children only when the browser is not online. _Recommended for simple use cases._
 
-**Note:** `Online` and `Offline` are mutually exclusive; if one is rendering, the other will not be.
+`<Detector render={({ online }) => ...}/>` - Component that calls its `render` prop every time the connection state changes. The `render` prop is supplied with an object with an `online` boolean value. _Recommended for more complex cases, e.g. when styles need to be changed with connection status._
 
 ### Props
 
-`<Online/>` and `<Offline/>` both accept the following props:
+`<Online/>`, `<Offline/>`, and `<Detector/>` accept the following props:
 
-| Prop              | Type   | Default                       |
-| ----------------- | ------ | ----------------------------- |
-| `pollingInterval` | Number | 5000                          |
-| `pollingUrl`      | String | `https://ipv4.icanhazip.com/` | 
+| Prop               | Type        | Description                       | Default                        |
+| ------------------ | ----------- | --------------------------------- | ------------------------------ |
+| `polling`          | Obj or Bool | Config for polling fallback (1)   | [see below]                    |
+| `polling.enabled`  | Boolean     | Force polling on or off           | Depends on the browser (1)     |
+| `polling.url`      | String      | URL to pool for connection status | `"https://ipv4.icanhazip.com"` |
+| `polling.interval` | Number      | How often (in ms) to poll         | 5000                           |
+| `polling.timeout`  | Number      | How long (in ms) before timeout   | 5000                           |
+| `onChange`         | Function    | Called when connection changes    | none                           |
+| `children` (2)     | Elements(s) | Child element(s) **not Detector** | none                           |
+| `render` (3)       | Func        | Render function **Detector Only** | none                           |
+
+(1) Polling is only used as a fallback for browsers that don't support the `"online"` event. Currently these are Chrome on Windows, Firefox on Windows, and Chrome on Linux.
+(2) `<Online/>` and `<Offline/>` only
+(3) `<Detector/>` only
 
 ### Browser Support
 
@@ -45,7 +55,7 @@ The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_event
 
 ### Example Uses
 
-- Use `Offline` to remind users they might need to connect to complete certain actions.
-- Use `Online` to let readers know the page is available offline.
-- Use `Online` to hide links or other content that is irrelevant when offline.
-- idk, use your dang imagination.
+* Use `Offline` to remind users they might need to connect to complete certain actions.
+* Use `Online` to let readers know the page is available offline.
+* Use `Online` to hide links or other content that is irrelevant when offline.
+* idk, use your dang imagination.
