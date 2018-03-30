@@ -20,9 +20,9 @@ const App = () => (
 
 ### Demo
 
-Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple example ([source code](https://github.com/chrisbolin/offline/blob/master/src/App.js)). As in this example, `react-detect-offline` pairs well with [`create-react-app`](https://github.com/facebookincubator/create-react-app), which creates offline-ready React apps out of the box.
+Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple example ([source code](https://github.com/chrisbolin/offline/blob/master/src/App.js)).
 
-### API
+### Components
 
 `<Online/>` - Component that renders its children only when the browser is online. _Recommended for simple use cases._
 
@@ -36,26 +36,21 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 | Prop               | Type        | Description                       | Default                        |
 | ------------------ | ----------- | --------------------------------- | ------------------------------ |
-| `polling`          | Obj or Bool | Config for polling fallback (1)   | [see below]                    |
-| `polling.enabled`  | Boolean     | Force polling on or off           | Depends on the browser (1)     |
+| `polling`          | Obj or Bool | Config for polling fallback [1]   | [see below]                    |
+| `polling.enabled`  | Boolean     | Force polling on or off           | Depends on the browser [1]     |
 | `polling.url`      | String      | URL to pool for connection status | `"https://ipv4.icanhazip.com"` |
-| `polling.interval` | Number      | How often (in ms) to poll         | 5000                           |
-| `polling.timeout`  | Number      | How long (in ms) before timeout   | 5000                           |
+| `polling.interval` | Number      | How often (in ms) to poll         | `5000`                         |
+| `polling.timeout`  | Number      | How long (in ms) before timeout   | `5000`                         |
 | `onChange`         | Function    | Called when connection changes    | none                           |
-| `children` (2)     | Elements(s) | Child element(s) **not Detector** | none                           |
-| `render` (3)       | Func        | Render function **Detector Only** | none                           |
+| `children` [2]     | Element(s)  | Children **not Detector**         | none                           |
+| `render` [3]       | Func        | Render function **Detector only** | none                           |
 
-(1) Polling is only used as a fallback for browsers that don't support the `"online"` event. Currently these are Chrome on Windows, Firefox on Windows, and Chrome on Linux.
-(2) `<Online/>` and `<Offline/>` only
-(3) `<Detector/>` only
+[1] Polling is only used as a fallback for browsers that don't support the `"online"` event. Currently these are Chrome on Windows, Firefox on Windows, and Chrome on Linux.
+
+[2] `<Online/>` and `<Offline/>` only. `<Detector/>` will not render `children`.
+
+[3] `<Detector/>` only
 
 ### Browser Support
 
-The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_events) we rely on is supported by IE 9+, Chrome 14+, Firefox 41+, and Safari 5+ - that's [94% of worldwide (98% of US)](http://caniuse.com/#feat=online-status) browser traffic.
-
-### Example Uses
-
-* Use `Offline` to remind users they might need to connect to complete certain actions.
-* Use `Online` to let readers know the page is available offline.
-* Use `Online` to hide links or other content that is irrelevant when offline.
-* idk, use your dang imagination.
+The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_events) we rely on is supported by IE 9+, Chrome 14+, Firefox 41+, and Safari 5+ - that's [94% of worldwide (98% of US)](http://caniuse.com/#feat=online-status) browser traffic. A polling fallback is used for browsers that don't implement the spec in a useful way (see note [1] in the above Props section).
