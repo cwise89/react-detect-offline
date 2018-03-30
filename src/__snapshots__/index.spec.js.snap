@@ -17,6 +17,7 @@ exports[`Offline should render children when offline 1`] = `
 <Offline
   pollingInterval={5000}
   pollingUrl="https://ipv4.icanhazip.com/"
+  wrapperType="span"
 >
   <h1>
     Hello World
@@ -28,6 +29,7 @@ exports[`Offline should render children when offline and using a custom polling 
 <Offline
   pollingInterval={5000}
   pollingUrl="https://www.google.com/"
+  wrapperType="span"
 >
   <h1>
     Hello World
@@ -52,6 +54,7 @@ exports[`Online should render children when online 1`] = `
 <Online
   pollingInterval={5000}
   pollingUrl="https://ipv4.icanhazip.com/"
+  wrapperType="span"
 >
   <h1>
     Hello World
@@ -63,6 +66,7 @@ exports[`Online should render children when online and using a custom polling UR
 <Online
   pollingInterval={5000}
   pollingUrl="https://www.google.com/"
+  wrapperType="span"
 >
   <h1>
     Hello World
