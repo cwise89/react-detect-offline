@@ -156,5 +156,7 @@ export class Detector extends Base {
     return this.props.render({ online: this.state.online });
   }
 }
-Detector.propTypes = propTypes;
+Detector.propTypes = Object.assign({}, propTypes, {
+  render: PropTypes.func.isRequired
+});
 Detector.defaultProps = defaultProps;
