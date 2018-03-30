@@ -4,14 +4,7 @@ import PropTypes from "prop-types";
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
-const config = {
-  poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
-  timeout: 5000,
-  interval: 5000
-};
-
-const ping = pollingUrl => {
+const ping = ({ url, timeout }) => {
   return new Promise(resolve => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
@@ -29,8 +22,8 @@ const ping = pollingUrl => {
       }
     };
 
-    xhr.open("GET", pollingUrl);
-    xhr.timeout = pollingUrl;
+    xhr.timeout = timeout;
+    xhr.open("GET", url);
     xhr.send();
   });
 };
@@ -38,15 +31,27 @@ const ping = pollingUrl => {
 const propTypes = {
   children: PropTypes.node,
   onChange: PropTypes.func,
-  pollingInterval: PropTypes.number,
-  pollingUrl: PropTypes.string,
+  polling: PropTypes.oneOfType([
+    PropTypes.shape({
+      url: PropTypes.string,
+      interval: PropTypes.number,
+      timeout: PropTypes.number
+    }),
+    PropTypes.bool
+  ]),
   wrapperType: PropTypes.string
 };
 
 const defaultProps = {
-  pollingInterval: config.interval,
-  pollingUrl: config.url,
+  polling: true,
   wrapperType: "span"
+};
+
+const defaultPollingConfig = {
+  enabled: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  url: "https://ipv4.icanhazip.com/",
+  timeout: 5000,
+  interval: 5000
 };
 
 // base class that detects offline/online changes
@@ -65,7 +70,7 @@ class Base extends Component {
     window.addEventListener("online", this.goOnline);
     window.addEventListener("offline", this.goOffline);
 
-    if (config.poll) {
+    if (this.getPollingConfig().enabled) {
       this.startPolling();
     }
   }
@@ -74,7 +79,7 @@ class Base extends Component {
     window.removeEventListener("online", this.goOnline);
     window.removeEventListener("offline", this.goOffline);
 
-    if (config.poll) {
+    if (this.pollingId) {
       this.stopPolling();
     }
   }
@@ -94,6 +99,17 @@ class Base extends Component {
 
     // string children, multiple children, or something else
     return createElement(wrapperType, {}, ...Children.toArray(children));
+  }
+
+  getPollingConfig() {
+    switch (this.props.polling) {
+      case true:
+        return defaultPollingConfig;
+      case false:
+        return { enabled: false };
+      default:
+        return Object.assign({}, defaultPollingConfig, this.props.polling);
+    }
   }
 
   goOnline() {
@@ -117,15 +133,13 @@ class Base extends Component {
   }
 
   startPolling() {
-    const { pollingInterval, pollingUrl } = this.props;
-
-    if (pollingUrl) {
-      this.pollingId = setInterval(() => {
-        ping(pollingUrl).then(online => {
-          online ? this.goOnline() : this.goOffline();
-        });
-      }, pollingInterval);
-    }
+    const { interval } = this.getPollingConfig();
+    this.pollingId = setInterval(() => {
+      const { url, timeout } = this.getPollingConfig();
+      ping({ url, timeout }).then(online => {
+        online ? this.goOnline() : this.goOffline();
+      });
+    }, interval);
   }
 
   stopPolling() {

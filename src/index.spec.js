@@ -110,7 +110,7 @@ describe("Offline", () => {
 
   it("should render children when offline and using a custom polling URL", () => {
     const wrapper = mount(
-      <Offline pollingUrl="https://www.google.com/">
+      <Offline polling={{ url: "https://www.google.com/" }}>
         <h1>Hello World</h1>
       </Offline>
     );
@@ -134,7 +134,7 @@ describe("Offline", () => {
     Object.defineProperty(navigator, "onLine", { value: true });
 
     const wrapper = mount(
-      <Offline pollingUrl="https://www.google.com/">
+      <Offline polling={{ url: "https://www.google.com/" }}>
         <h1>Hello World</h1>
       </Offline>
     );

@@ -5,14 +5,19 @@ import "./App.css";
 class App extends Component {
   render() {
     return (
-      <Detector
-        render={({ online }) => (
-          <div className={`App ${online ? "Online" : "Offline"}`}>
-            <Online>Online</Online>
-            <Offline>OFFLINE</Offline>
-          </div>
-        )}
-      />
+      <div>
+        <Detector
+          render={({ online }) => (
+            <div className={`App ${online ? "Online" : "Offline"}`}>
+              detector: {online ? "online" : "offline"}
+            </div>
+          )}
+        />
+        <Online>Online Component</Online>
+        <Offline polling={{ enabled: true, interval: 2000, timeout: 1000 }}>
+          Offline Component with custom polling
+        </Offline>
+      </div>
     );
   }
 }

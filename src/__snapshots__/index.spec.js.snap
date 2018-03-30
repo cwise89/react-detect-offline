@@ -15,8 +15,7 @@ Array [
 
 exports[`Offline should render children when offline 1`] = `
 <Offline
-  pollingInterval={5000}
-  pollingUrl="https://ipv4.icanhazip.com/"
+  polling={true}
   wrapperType="span"
 >
   <h1>
@@ -27,8 +26,11 @@ exports[`Offline should render children when offline 1`] = `
 
 exports[`Offline should render children when offline and using a custom polling URL 1`] = `
 <Offline
-  pollingInterval={5000}
-  pollingUrl="https://www.google.com/"
+  polling={
+    Object {
+      "url": "https://www.google.com/",
+    }
+  }
   wrapperType="span"
 >
   <h1>
@@ -52,8 +54,7 @@ Array [
 
 exports[`Online should render children when online 1`] = `
 <Online
-  pollingInterval={5000}
-  pollingUrl="https://ipv4.icanhazip.com/"
+  polling={true}
   wrapperType="span"
 >
   <h1>
@@ -64,7 +65,7 @@ exports[`Online should render children when online 1`] = `
 
 exports[`Online should render children when online and using a custom polling URL 1`] = `
 <Online
-  pollingInterval={5000}
+  polling={true}
   pollingUrl="https://www.google.com/"
   wrapperType="span"
 >
