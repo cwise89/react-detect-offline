@@ -34,7 +34,7 @@ const ping = config => {
     };
 
     xhr.open("GET", config.url);
-    xhr.timeout = config.url;
+    xhr.timeout = config.timeout;
     xhr.send();
   });
 };
