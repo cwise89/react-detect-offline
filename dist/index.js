@@ -51,8 +51,8 @@ var ping = function ping(_ref) {
       }
     };
 
-    xhr.timeout = timeout;
     xhr.open("GET", url);
+    xhr.timeout = timeout;
     xhr.send();
   });
 };

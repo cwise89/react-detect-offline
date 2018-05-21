@@ -1,6 +1,6 @@
 {
   "name": "react-detect-offline",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Offline and Online components for React",
   "main": "dist/index.js",
   "repository": {
@@ -42,13 +42,7 @@
     "prettier": "prettier src/** demo/src/** --write",
     "test.cover": "jest spec --coverage"
   },
-  "keywords": [
-    "react",
-    "offline",
-    "online",
-    "detect",
-    "disconnect"
-  ],
+  "keywords": ["react", "offline", "online", "detect", "disconnect"],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js",
