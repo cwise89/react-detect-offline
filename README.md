@@ -24,11 +24,26 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 ### Components
 
-`<Online/>` - Component that renders its children only when the browser is online. _Recommended for simple use cases._
+#### Simple
 
-`<Offline/>` - Component that renders its children only when the browser is not online. _Recommended for simple use cases._
+`<Online/>` and `<Offline/>` - Components that render their children only when the browser is online/offline.
+
+```jsx
+<Offline>You're offline right now. Check your connection.</Offline>
+```
+
+#### Advanced
 
 `<Detector render={({ online }) => ...}/>` - Component that calls its `render` prop every time the connection state changes. The `render` prop is supplied with an object with an `online` boolean value. _Recommended for more complex cases, e.g. when styles need to be changed with connection status._
+
+
+```jsx
+<Detector render={({ online }) => (
+  <div className={online ? "normal" : "warning"}>
+    You are currently {online ? "online" : "offline"}
+  </div>
+)}/>
+```
 
 ### Props
 
