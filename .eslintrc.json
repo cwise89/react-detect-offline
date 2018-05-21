@@ -1,0 +1,22 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "formidable",
+    "formidable/configurations/es6-browser",
+    "formidable/configurations/es6-react-test",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "no-magic-numbers": "off",
+    "filenames/match-regex": "off"
+  }
+}

@@ -9,7 +9,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = require("react");
 
-var _react2 = _interopRequireDefault(_react);
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24,15 +26,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
-var config = {
-  poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
-  timeout: 5000,
-  interval: 5000
-};
+var ping = function ping(_ref) {
+  var url = _ref.url,
+      timeout = _ref.timeout;
 
-var ping = function ping(config) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var isOnline = function isOnline() {
       return resolve(true);
     };
@@ -53,10 +51,33 @@ var ping = function ping(config) {
       }
     };
 
-    xhr.open("GET", config.url);
-    xhr.timeout = config.url;
+    xhr.timeout = timeout;
+    xhr.open("GET", url);
     xhr.send();
   });
+};
+
+var propTypes = {
+  children: _propTypes2.default.node,
+  onChange: _propTypes2.default.func,
+  polling: _propTypes2.default.oneOfType([_propTypes2.default.shape({
+    url: _propTypes2.default.string,
+    interval: _propTypes2.default.number,
+    timeout: _propTypes2.default.number
+  }), _propTypes2.default.bool]),
+  wrapperType: _propTypes2.default.string
+};
+
+var defaultProps = {
+  polling: true,
+  wrapperType: "span"
+};
+
+var defaultPollingConfig = {
+  enabled: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  url: "https://ipv4.icanhazip.com/",
+  timeout: 5000,
+  interval: 5000
 };
 
 // base class that detects offline/online changes
@@ -79,15 +100,35 @@ var Base = function (_Component) {
   }
 
   _createClass(Base, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      window.addEventListener("online", this.goOnline);
+      window.addEventListener("offline", this.goOffline);
+
+      if (this.getPollingConfig().enabled) {
+        this.startPolling();
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      window.removeEventListener("online", this.goOnline);
+      window.removeEventListener("offline", this.goOffline);
+
+      if (this.pollingId) {
+        this.stopPolling();
+      }
+    }
+  }, {
     key: "renderChildren",
     value: function renderChildren() {
-      var children = this.props.children;
-      var _props$wrapperType = this.props.wrapperType,
-          wrapperType = _props$wrapperType === undefined ? "span" : _props$wrapperType;
+      var _props = this.props,
+          children = _props.children,
+          wrapperType = _props.wrapperType;
 
       // usual case: one child that is a react Element
 
-      if (_react2.default.isValidElement(children)) {
+      if ((0, _react.isValidElement)(children)) {
         return children;
       }
 
@@ -97,10 +138,19 @@ var Base = function (_Component) {
       }
 
       // string children, multiple children, or something else
-      var childrenArray = _react.Children.toArray(children);
-      var firstChild = childrenArray[0];
-
-      return _react.createElement.apply(undefined, [wrapperType, {}].concat(_toConsumableArray(childrenArray)));
+      return _react.createElement.apply(undefined, [wrapperType, {}].concat(_toConsumableArray(_react.Children.toArray(children))));
+    }
+  }, {
+    key: "getPollingConfig",
+    value: function getPollingConfig() {
+      switch (this.props.polling) {
+        case true:
+          return defaultPollingConfig;
+        case false:
+          return { enabled: false };
+        default:
+          return Object.assign({}, defaultPollingConfig, this.props.polling);
+      }
     }
   }, {
     key: "goOnline",
@@ -130,41 +180,31 @@ var Base = function (_Component) {
     value: function startPolling() {
       var _this2 = this;
 
+      var _getPollingConfig = this.getPollingConfig(),
+          interval = _getPollingConfig.interval;
+
       this.pollingId = setInterval(function () {
-        ping(config).then(function (online) {
+        var _getPollingConfig2 = _this2.getPollingConfig(),
+            url = _getPollingConfig2.url,
+            timeout = _getPollingConfig2.timeout;
+
+        ping({ url: url, timeout: timeout }).then(function (online) {
           online ? _this2.goOnline() : _this2.goOffline();
         });
-      }, config.interval);
+      }, interval);
     }
   }, {
     key: "stopPolling",
     value: function stopPolling() {
       clearInterval(this.pollingId);
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      window.addEventListener("online", this.goOnline);
-      window.addEventListener("offline", this.goOffline);
-
-      if (config.poll) {
-        this.startPolling();
-      }
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      window.removeEventListener("online", this.goOnline);
-      window.removeEventListener("offline", this.goOffline);
-
-      if (config.poll) {
-        this.stopPolling();
-      }
-    }
   }]);
 
   return Base;
 }(_react.Component);
+
+Base.propTypes = propTypes;
+Base.defaultProps = defaultProps;
 
 var Online = exports.Online = function (_Base) {
   _inherits(Online, _Base);
@@ -185,6 +225,9 @@ var Online = exports.Online = function (_Base) {
   return Online;
 }(Base);
 
+Online.propTypes = propTypes;
+Online.defaultProps = defaultProps;
+
 var Offline = exports.Offline = function (_Base2) {
   _inherits(Offline, _Base2);
 
@@ -204,6 +247,9 @@ var Offline = exports.Offline = function (_Base2) {
   return Offline;
 }(Base);
 
+Offline.propTypes = propTypes;
+Offline.defaultProps = defaultProps;
+
 var Detector = exports.Detector = function (_Base3) {
   _inherits(Detector, _Base3);
 
@@ -222,3 +268,8 @@ var Detector = exports.Detector = function (_Base3) {
 
   return Detector;
 }(Base);
+
+Detector.propTypes = Object.assign({}, propTypes, {
+  render: _propTypes2.default.func.isRequired
+});
+Detector.defaultProps = defaultProps;

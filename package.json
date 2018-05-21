@@ -1,6 +1,6 @@
 {
   "name": "react-detect-offline",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Offline and Online components for React",
   "main": "dist/index.js",
   "repository": {
@@ -11,12 +11,22 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-eslint": "^8.2.2",
     "babel-jest": "^21.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
+    "eslint": "^4.19.1",
+    "eslint-config-formidable": "^3.0.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
     "jest": "^21.0.1",
+    "prettier": "^1.11.1",
+    "prop-types": "^15.6.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1"
@@ -26,8 +36,10 @@
   },
   "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
   "scripts": {
-    "compile": "babel src/index.js -o dist/index.js",
+    "build": "babel src/index.js -o dist/index.js",
     "test": "jest spec --watch",
+    "lint": "eslint src/ demo/src",
+    "prettier": "prettier src/** demo/src/** --write",
     "test.cover": "jest spec --coverage"
   },
   "keywords": [

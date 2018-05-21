@@ -1,22 +1,11 @@
-import React, {
-  Component,
-  isValidElement,
-  Children,
-  createElement
-} from "react";
+import { Component, isValidElement, Children, createElement } from "react";
+import PropTypes from "prop-types";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
-const config = {
-  poll: unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
-  timeout: 5000,
-  interval: 5000
-};
-
-const ping = config => {
-  return new Promise((resolve, reject) => {
+const ping = ({ url, timeout }) => {
+  return new Promise(resolve => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
 
@@ -33,10 +22,36 @@ const ping = config => {
       }
     };
 
-    xhr.open("GET", config.url);
-    xhr.timeout = config.timeout;
+    xhr.open("GET", url);
+    xhr.timeout = timeout;
     xhr.send();
   });
+};
+
+const propTypes = {
+  children: PropTypes.node,
+  onChange: PropTypes.func,
+  polling: PropTypes.oneOfType([
+    PropTypes.shape({
+      url: PropTypes.string,
+      interval: PropTypes.number,
+      timeout: PropTypes.number
+    }),
+    PropTypes.bool
+  ]),
+  wrapperType: PropTypes.string
+};
+
+const defaultProps = {
+  polling: true,
+  wrapperType: "span"
+};
+
+const defaultPollingConfig = {
+  enabled: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  url: "https://ipv4.icanhazip.com/",
+  timeout: 5000,
+  interval: 5000
 };
 
 // base class that detects offline/online changes
@@ -51,12 +66,29 @@ class Base extends Component {
     this.goOffline = this.goOffline.bind(this);
   }
 
+  componentDidMount() {
+    window.addEventListener("online", this.goOnline);
+    window.addEventListener("offline", this.goOffline);
+
+    if (this.getPollingConfig().enabled) {
+      this.startPolling();
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("online", this.goOnline);
+    window.removeEventListener("offline", this.goOffline);
+
+    if (this.pollingId) {
+      this.stopPolling();
+    }
+  }
+
   renderChildren() {
-    const { children } = this.props;
-    const { wrapperType = "span" } = this.props;
+    const { children, wrapperType } = this.props;
 
     // usual case: one child that is a react Element
-    if (React.isValidElement(children)) {
+    if (isValidElement(children)) {
       return children;
     }
 
@@ -66,10 +98,18 @@ class Base extends Component {
     }
 
     // string children, multiple children, or something else
-    const childrenArray = Children.toArray(children);
-    const firstChild = childrenArray[0];
+    return createElement(wrapperType, {}, ...Children.toArray(children));
+  }
 
-    return createElement(wrapperType, {}, ...childrenArray);
+  getPollingConfig() {
+    switch (this.props.polling) {
+      case true:
+        return defaultPollingConfig;
+      case false:
+        return { enabled: false };
+      default:
+        return Object.assign({}, defaultPollingConfig, this.props.polling);
+    }
   }
 
   goOnline() {
@@ -93,50 +133,44 @@ class Base extends Component {
   }
 
   startPolling() {
+    const { interval } = this.getPollingConfig();
     this.pollingId = setInterval(() => {
-      ping(config).then(online => {
+      const { url, timeout } = this.getPollingConfig();
+      ping({ url, timeout }).then(online => {
         online ? this.goOnline() : this.goOffline();
       });
-    }, config.interval);
+    }, interval);
   }
 
   stopPolling() {
     clearInterval(this.pollingId);
   }
-
-  componentDidMount() {
-    window.addEventListener("online", this.goOnline);
-    window.addEventListener("offline", this.goOffline);
-
-    if (config.poll) {
-      this.startPolling();
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("online", this.goOnline);
-    window.removeEventListener("offline", this.goOffline);
-
-    if (config.poll) {
-      this.stopPolling();
-    }
-  }
 }
+Base.propTypes = propTypes;
+Base.defaultProps = defaultProps;
 
 export class Online extends Base {
   render() {
     return this.state.online ? this.renderChildren() : null;
   }
 }
+Online.propTypes = propTypes;
+Online.defaultProps = defaultProps;
 
 export class Offline extends Base {
   render() {
     return !this.state.online ? this.renderChildren() : null;
   }
 }
+Offline.propTypes = propTypes;
+Offline.defaultProps = defaultProps;
 
 export class Detector extends Base {
   render() {
     return this.props.render({ online: this.state.online });
   }
 }
+Detector.propTypes = Object.assign({}, propTypes, {
+  render: PropTypes.func.isRequired
+});
+Detector.defaultProps = defaultProps;
