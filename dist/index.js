@@ -74,7 +74,7 @@ var defaultProps = {
 };
 
 var defaultPollingConfig = {
-  enabled: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  enabled: typeof navigator !== "undefined" && unsupportedUserAgentsPattern.test(navigator.userAgent),
   url: "https://ipv4.icanhazip.com/",
   timeout: 5000,
   interval: 5000
@@ -91,7 +91,7 @@ var Base = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Base.__proto__ || Object.getPrototypeOf(Base)).call(this));
 
     _this.state = {
-      online: typeof navigator.onLine === "boolean" ? navigator.onLine : true
+      online: typeof navigator !== "undefined" && typeof navigator.onLine === "boolean" ? navigator.onLine : true
     };
     // bind event handlers
     _this.goOnline = _this.goOnline.bind(_this);

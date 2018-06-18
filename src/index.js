@@ -48,7 +48,9 @@ const defaultProps = {
 };
 
 const defaultPollingConfig = {
-  enabled: unsupportedUserAgentsPattern.test(navigator.userAgent),
+  enabled:
+    typeof navigator !== "undefined" &&
+    unsupportedUserAgentsPattern.test(navigator.userAgent),
   url: "https://ipv4.icanhazip.com/",
   timeout: 5000,
   interval: 5000
@@ -59,7 +61,11 @@ class Base extends Component {
   constructor() {
     super();
     this.state = {
-      online: typeof navigator.onLine === "boolean" ? navigator.onLine : true
+      online:
+        typeof navigator !== "undefined" &&
+        typeof navigator.onLine === "boolean"
+          ? navigator.onLine
+          : true
     };
     // bind event handlers
     this.goOnline = this.goOnline.bind(this);
