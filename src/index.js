@@ -1,6 +1,8 @@
 import { Component, isValidElement, Children, createElement } from "react";
 import PropTypes from "prop-types";
 
+const inBrowser = typeof navigator !== "undefined";
+
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
@@ -48,9 +50,7 @@ const defaultProps = {
 };
 
 const defaultPollingConfig = {
-  enabled:
-    typeof navigator !== "undefined" &&
-    unsupportedUserAgentsPattern.test(navigator.userAgent),
+  enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
   url: "https://ipv4.icanhazip.com/",
   timeout: 5000,
   interval: 5000
@@ -62,8 +62,7 @@ class Base extends Component {
     super();
     this.state = {
       online:
-        typeof navigator !== "undefined" &&
-        typeof navigator.onLine === "boolean"
+        inBrowser && typeof navigator.onLine === "boolean"
           ? navigator.onLine
           : true
     };

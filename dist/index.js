@@ -23,6 +23,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var inBrowser = typeof navigator !== "undefined";
+
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
@@ -74,7 +76,7 @@ var defaultProps = {
 };
 
 var defaultPollingConfig = {
-  enabled: typeof navigator !== "undefined" && unsupportedUserAgentsPattern.test(navigator.userAgent),
+  enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
   url: "https://ipv4.icanhazip.com/",
   timeout: 5000,
   interval: 5000
@@ -91,7 +93,7 @@ var Base = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Base.__proto__ || Object.getPrototypeOf(Base)).call(this));
 
     _this.state = {
-      online: typeof navigator !== "undefined" && typeof navigator.onLine === "boolean" ? navigator.onLine : true
+      online: inBrowser && typeof navigator.onLine === "boolean" ? navigator.onLine : true
     };
     // bind event handlers
     _this.goOnline = _this.goOnline.bind(_this);
