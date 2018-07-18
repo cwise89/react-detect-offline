@@ -36,13 +36,14 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 `<Detector render={({ online }) => ...}/>` - Component that calls its `render` prop every time the connection state changes. The `render` prop is supplied with an object with an `online` boolean value. _Recommended for more complex cases, e.g. when styles need to be changed with connection status._
 
-
 ```jsx
-<Detector render={({ online }) => (
-  <div className={online ? "normal" : "warning"}>
-    You are currently {online ? "online" : "offline"}
-  </div>
-)}/>
+<Detector
+  render={({ online }) => (
+    <div className={online ? "normal" : "warning"}>
+      You are currently {online ? "online" : "offline"}
+    </div>
+  )}
+/>
 ```
 
 ### Props
@@ -69,3 +70,10 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 ### Browser Support
 
 The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_events) we rely on is supported by IE 9+, Chrome 14+, Firefox 41+, and Safari 5+ - that's [94% of worldwide (98% of US)](http://caniuse.com/#feat=online-status) browser traffic. A polling fallback is used for browsers that don't implement the spec in a useful way (see note [1] in the above Props section).
+
+### Contributing
+
+PRs are welcome!
+
+* Test: `yarn test`
+* Build: `yarn build`. Make sure you commit the build file (`dist/index.js`)
