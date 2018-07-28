@@ -46,7 +46,8 @@ const propTypes = {
 
 const defaultProps = {
   polling: true,
-  wrapperType: "span"
+  wrapperType: "span",
+  onChange: () => {},
 };
 
 const defaultPollingConfig = {
