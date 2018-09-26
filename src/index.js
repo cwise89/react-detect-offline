@@ -1,3 +1,5 @@
+import "@babel/polyfill";
+
 import { Component, isValidElement, Children, createElement } from "react";
 import PropTypes from "prop-types";
 
