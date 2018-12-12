@@ -15,16 +15,17 @@ const ping = ({ url, timeout }) => {
 
     xhr.onerror = isOffline;
     xhr.ontimeout = isOffline;
-    xhr.onload = () => {
-      const response = xhr.responseText.trim();
-      if (!response) {
-        isOffline();
-      } else {
-        isOnline();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+        if (xhr.status >= 200 && xhr.status < 400) {
+          isOnline();
+        } else {
+          isOffline();
+        }
       }
     };
 
-    xhr.open("GET", url);
+    xhr.open("HEAD", url);
     xhr.timeout = timeout;
     xhr.send();
   });
