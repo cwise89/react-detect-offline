@@ -27,7 +27,6 @@ var inBrowser = typeof navigator !== "undefined";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
-
 var ping = function ping(_ref) {
   var url = _ref.url,
       timeout = _ref.timeout;
@@ -39,9 +38,7 @@ var ping = function ping(_ref) {
     var isOffline = function isOffline() {
       return resolve(false);
     };
-
     var xhr = new XMLHttpRequest();
-
     xhr.onerror = isOffline;
     xhr.ontimeout = isOffline;
     xhr.onload = function () {
@@ -52,18 +49,55 @@ var ping = function ping(_ref) {
         isOnline();
       }
     };
-
     xhr.open("GET", url);
     xhr.timeout = timeout;
     xhr.send();
   });
 };
 
+var pingAllUrls = async function pingAllUrls(_ref2) {
+  var url = _ref2.url,
+      timeout = _ref2.timeout;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = url[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var _url = _step.value;
+
+      try {
+        var result = await ping({ url: _url, timeout: timeout });
+        if (result === true) {
+          return result;
+        }
+      } catch (err) {
+        return false;
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return false;
+};
+
 var propTypes = {
   children: _propTypes2.default.node,
   onChange: _propTypes2.default.func,
   polling: _propTypes2.default.oneOfType([_propTypes2.default.shape({
-    url: _propTypes2.default.string,
+    url: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.array]),
     interval: _propTypes2.default.number,
     timeout: _propTypes2.default.number
   }), _propTypes2.default.bool]),
@@ -77,7 +111,7 @@ var defaultProps = {
 
 var defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
+  url: ["https://ipv4.icanhazip.com/"],
   timeout: 5000,
   interval: 5000
 };
@@ -190,7 +224,7 @@ var Base = function (_Component) {
             url = _getPollingConfig2.url,
             timeout = _getPollingConfig2.timeout;
 
-        ping({ url: url, timeout: timeout }).then(function (online) {
+        pingAllUrls({ url: url, timeout: timeout }).then(function (online) {
           online ? _this2.goOnline() : _this2.goOffline();
         });
       }, interval);

@@ -54,7 +54,7 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 | ------------------ | ----------- | --------------------------------- | ------------------------------ |
 | `polling`          | Obj or Bool | Config for polling fallback [1]   | [see below]                    |
 | `polling.enabled`  | Boolean     | Force polling on or off           | Depends on the browser [1]     |
-| `polling.url`      | String      | URL to pool for connection status | `"https://ipv4.icanhazip.com"` |
+| `polling.url`      | Array[String] OR String     | URL to pool for connection status | `"https://ipv4.icanhazip.com"` |
 | `polling.interval` | Number      | How often (in ms) to poll         | `5000`                         |
 | `polling.timeout`  | Number      | How long (in ms) before timeout   | `5000`                         |
 | `onChange`         | Function    | Called when connection changes    | none                           |
