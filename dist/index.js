@@ -44,16 +44,17 @@ var ping = function ping(_ref) {
 
     xhr.onerror = isOffline;
     xhr.ontimeout = isOffline;
-    xhr.onload = function () {
-      var response = xhr.responseText.trim();
-      if (!response) {
-        isOffline();
-      } else {
-        isOnline();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+        if (xhr.status >= 200 && xhr.status < 400) {
+          isOnline();
+        } else {
+          isOffline();
+        }
       }
     };
 
-    xhr.open("GET", url);
+    xhr.open("HEAD", url);
     xhr.timeout = timeout;
     xhr.send();
   });
