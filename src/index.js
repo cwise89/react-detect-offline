@@ -5,14 +5,11 @@ const inBrowser = typeof navigator !== "undefined";
 
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
-
 const ping = ({ url, timeout }) => {
   return new Promise(resolve => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
-
     const xhr = new XMLHttpRequest();
-
     xhr.onerror = isOffline;
     xhr.ontimeout = isOffline;
     xhr.onreadystatechange = () => {
@@ -31,12 +28,29 @@ const ping = ({ url, timeout }) => {
   });
 };
 
+const pingAllUrls = async ({ url, timeout }) => {
+  for (const url of url) {
+    try {
+      const result = await ping({ url, timeout });
+      if (result === true) {
+        return result;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+  return false;
+};
+
 const propTypes = {
   children: PropTypes.node,
   onChange: PropTypes.func,
   polling: PropTypes.oneOfType([
     PropTypes.shape({
-      url: PropTypes.string,
+      url: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array
+      ]),
       interval: PropTypes.number,
       timeout: PropTypes.number
     }),
@@ -52,7 +66,7 @@ const defaultProps = {
 
 const defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
+  url: ["https://ipv4.icanhazip.com/"],
   timeout: 5000,
   interval: 5000
 };
@@ -142,7 +156,7 @@ class Base extends Component {
     const { interval } = this.getPollingConfig();
     this.pollingId = setInterval(() => {
       const { url, timeout } = this.getPollingConfig();
-      ping({ url, timeout }).then(online => {
+      pingAllUrls({ url, timeout }).then(online => {
         online ? this.goOnline() : this.goOffline();
       });
     }, interval);
