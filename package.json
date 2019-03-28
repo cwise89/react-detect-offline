@@ -37,18 +37,13 @@
   "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
   "scripts": {
     "build": "babel src/index.js -o dist/index.js",
-    "test": "jest spec --watch",
+    "test": "jest spec",
+    "test-watch": "jest spec --watch",
     "lint": "eslint src/ demo/src",
     "prettier": "prettier src/** demo/src/** --write",
     "test.cover": "jest spec --coverage"
   },
-  "keywords": [
-    "react",
-    "offline",
-    "online",
-    "detect",
-    "disconnect"
-  ],
+  "keywords": ["react", "offline", "online", "detect", "disconnect"],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js",
