@@ -64,7 +64,7 @@ const defaultProps = {
 const defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
   interval: 5000,
-  method: "GET",
+  method: "HEAD",
   timeout: 5000,
   url: "https://ipv4.icanhazip.com/"
 };
