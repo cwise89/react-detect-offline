@@ -50,16 +50,17 @@ Check out [chris.bolin.co/offline](https://chris.bolin.co/offline) for a simple 
 
 `<Online/>`, `<Offline/>`, and `<Detector/>` accept the following props:
 
-| Prop               | Type        | Description                       | Default                        |
-| ------------------ | ----------- | --------------------------------- | ------------------------------ |
-| `polling`          | Obj or Bool | Config for polling fallback [1]   | [see below]                    |
-| `polling.enabled`  | Boolean     | Force polling on or off           | Depends on the browser [1]     |
-| `polling.url`      | String      | URL to pool for connection status | `"https://ipv4.icanhazip.com"` |
-| `polling.interval` | Number      | How often (in ms) to poll         | `5000`                         |
-| `polling.timeout`  | Number      | How long (in ms) before timeout   | `5000`                         |
-| `onChange`         | Function    | Called when connection changes    | none                           |
-| `children` [2]     | Element(s)  | Children **not Detector**         | none                           |
-| `render` [3]       | Func        | Render function **Detector only** | none                           |
+| Prop               | Type        | Description                               | Default                                                                           |
+| ------------------ | ----------- | ---------------------------------         | ------------------------------                                                    |
+| `polling`          | Obj or Bool | Config for polling fallback [1]           | [see below]                                                                       |
+| `polling.enabled`  | Boolean     | Force polling on or off                   | Depends on the browser [1]                                                        |
+| `polling.url`      | String      | URL to pool for connection status         | `"https://ipv4.icanhazip.com"`                                                    |
+| `polling.interval` | Number      | How often (in ms) to poll                 | `5000`                                                                            |
+| `polling.timeout`  | Number      | How long (in ms) before timeout           | `5000`                                                                            |
+| `polling.method`   | String      | method used to poll for connection status | `CONNECT`, `DELETE`, `GET`, `HEAD`, `OPTIONS`, `PATCH`, `POST`, `PUT`, or `TRACE` |
+| `onChange`         | Function    | Called when connection changes            | none                                                                              |
+| `children` [2]     | Element(s)  | Children **not Detector**                 | none                                                                              |
+| `render` [3]       | Func        | Render function **Detector only**         | none                                                                              |
 
 [1] Polling is only used as a fallback for browsers that don't support the `"online"` event. Currently these are Chrome on Windows, Firefox on Windows, and Chrome on Linux.
 

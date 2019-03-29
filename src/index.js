@@ -6,7 +6,7 @@ const inBrowser = typeof navigator !== "undefined";
 // these browsers don't fully support navigator.onLine, so we need to use a polling backup
 const unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
 
-const ping = ({ url, timeout }) => {
+const ping = ({ url, timeout, method }) => {
   return new Promise(resolve => {
     const isOnline = () => resolve(true);
     const isOffline = () => resolve(false);
@@ -25,7 +25,7 @@ const ping = ({ url, timeout }) => {
       }
     };
 
-    xhr.open("HEAD", url);
+    xhr.open(method, url);
     xhr.timeout = timeout;
     xhr.send();
   });
@@ -36,9 +36,20 @@ const propTypes = {
   onChange: PropTypes.func,
   polling: PropTypes.oneOfType([
     PropTypes.shape({
-      url: PropTypes.string,
       interval: PropTypes.number,
-      timeout: PropTypes.number
+      url: PropTypes.string,
+      timeout: PropTypes.number,
+      method: PropTypes.oneOf([
+        "CONNECT",
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT",
+        "TRACE"
+      ])
     }),
     PropTypes.bool
   ]),
@@ -52,9 +63,10 @@ const defaultProps = {
 
 const defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
+  interval: 5000,
+  method: "GET",
   timeout: 5000,
-  interval: 5000
+  url: "https://ipv4.icanhazip.com/"
 };
 
 // base class that detects offline/online changes
