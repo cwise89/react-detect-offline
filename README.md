@@ -1,4 +1,5 @@
 [![npm](https://img.shields.io/npm/v/react-detect-offline.svg)](https://www.npmjs.com/package/react-detect-offline)
+[![npm downloads](https://img.shields.io/npm/dm/react-detect-offline.svg)](https://www.npmjs.com/package/react-detect-offline)
 ![gzip size](http://img.badgesize.io/https://unpkg.com/react-detect-offline?compression=gzip&label=gzip%20size)
 ![badges](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 ![badges](https://img.shields.io/badge/badges-4-lightgrey.svg)
