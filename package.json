@@ -22,6 +22,7 @@
   "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
   "scripts": {
     "build": "rimraf dist/ && tsc",
+    "build-watch": "tsc --watch",
     "test": "jest spec",
     "test-watch": "jest spec --watch",
     "lint": "eslint src/ demo/src",
