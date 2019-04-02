@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+
 import useOnline from "react-detect-offline/dist/useOnline";
 
 import "./App.css";
 
-function App() {
+export default function App() {
   const online = useOnline();
   return (
     <div className="App">
@@ -11,5 +12,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
