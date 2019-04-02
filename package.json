@@ -1,25 +1,9 @@
 {
-  "name": "react-detect-offline",
-  "version": "2.3.0",
-  "description": "Offline and Online components for React",
-  "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chrisbolin/react-detect-offline.git"
-  },
-  "files": [
-    "/dist/"
+  "private": true,
+  "workspaces": [
+    "package",
+    "demo"
   ],
-  "author": "Chris Bolin",
-  "license": "MIT",
-  "devDependencies": {
-    "rimraf": "^2.6.3",
-    "typescript": "^3.4.1"
-  },
-  "bugs": {
-    "url": "https://github.com/chrisbolin/react-detect-offline/issues"
-  },
-  "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
   "scripts": {
     "build": "rimraf dist/ && tsc",
     "build-watch": "tsc --watch",
@@ -28,27 +12,5 @@
     "lint": "eslint src/ demo/src",
     "prettier": "prettier src/** demo/src/** --write",
     "test.cover": "jest spec --coverage"
-  },
-  "keywords": [
-    "react",
-    "offline",
-    "online",
-    "detect",
-    "disconnect"
-  ],
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/demo/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
   }
 }
