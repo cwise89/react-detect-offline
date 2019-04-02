@@ -2,3 +2,7 @@
   font-family: "Helvetica Neue", sans-serif;
   text-align: center;
 }
+
+::selection {
+  background-color: yellow;
+}
