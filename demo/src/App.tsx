@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import useOnline from "react-detect-offline/dist/useOnline";
+import { useOnline } from "react-detect-offline/dist/";
 
 export default function App() {
   const online = useOnline();
