@@ -17,7 +17,7 @@ const ping = ({ url, timeout }) => {
     xhr.ontimeout = isOffline;
     xhr.onreadystatechange = () => {
       if (xhr.readyState === xhr.HEADERS_RECEIVED) {
-        if (xhr.status >= 200 && xhr.status < 400) {
+        if (xhr.status) {
           isOnline();
         } else {
           isOffline();
