@@ -46,7 +46,7 @@ var ping = function ping(_ref) {
     xhr.ontimeout = isOffline;
     xhr.onreadystatechange = function () {
       if (xhr.readyState === xhr.HEADERS_RECEIVED) {
-        if (xhr.status >= 200 && xhr.status < 400) {
+        if (xhr.status) {
           isOnline();
         } else {
           isOffline();
