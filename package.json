@@ -4,12 +4,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "rimraf dist/ && tsc",
+    "build": "rimraf packages/react-detect-offline/dist/ && tsc",
     "build-watch": "tsc --watch",
-    "test": "jest spec",
-    "test-watch": "jest spec --watch",
     "lint": "eslint src/ demo/src",
     "prettier": "prettier src/** demo/src/** --write",
-    "test.cover": "jest spec --coverage"
+    "ci": "yarn run build"
   }
 }
