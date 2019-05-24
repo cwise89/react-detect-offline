@@ -1,8 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "package",
-    "demo"
+    "packages/*"
   ],
   "scripts": {
     "build": "rimraf dist/ && tsc",

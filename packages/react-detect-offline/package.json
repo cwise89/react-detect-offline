@@ -13,6 +13,7 @@
   "author": "Chris Bolin",
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^16.8.18",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.1"
   },
@@ -41,5 +42,6 @@
         "statements": 100
       }
     }
-  }
+  },
+  "peerDependencies": {}
 }
