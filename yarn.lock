@@ -394,7 +394,7 @@ babel-core@^6.0.0, babel-core@^6.24.1:
 
 babel-eslint@^8.2.2:
   version "8.2.2"
-  resolved "http://registry.npmjs.org/babel-eslint/-/babel-eslint-8.2.2.tgz#1102273354c6f0b29b4ea28a65f97d122296b68b"
+  resolved "https://registry.npmjs.org/babel-eslint/-/babel-eslint-8.2.2.tgz#1102273354c6f0b29b4ea28a65f97d122296b68b"
   integrity sha512-Qt2lz2egBxNYWqN9JIO2z4NOOf8i4b5JS6CFoYrOZZTDssueiV1jH/jsefyg+86SeNY3rB361/mi3kE1WK2WYQ==
   dependencies:
     "@babel/code-frame" "^7.0.0-beta.40"
@@ -3051,9 +3051,9 @@ lodash.map@^4.4.0:
   integrity sha1-dx7Hg540c9nEzeKLGTlMNWL09tM=
 
 lodash.merge@^4.4.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
-  integrity sha1-aYhLoUSsM/5plzemCG3v+t0PicU=
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.omitby@^4.5.0:
   version "4.6.0"
