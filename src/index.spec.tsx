@@ -1,14 +1,23 @@
 import React from "react";
-import { mount } from "enzyme";
+import { configure, mount } from "enzyme";
 import toJSON from "enzyme-to-json";
-import { Online, Offline } from "./";
+import Adapter from "enzyme-adapter-react-16";
 
-const eventListenerMap = {};
+configure({ adapter: new Adapter() });
+
+import { Online, Offline } from ".";
+
+const pollingGoogle = {
+  enabled: true,
+  url: "https://www.google.com/",
+};
+
+const eventListenerMap: any = {};
 beforeEach(() => {
   window.addEventListener = jest.fn((event, cb) => {
     eventListenerMap[event] = cb;
   });
-  window.removeEventListener = jest.fn(event => {
+  window.removeEventListener = jest.fn((event) => {
     eventListenerMap[event] = undefined;
   });
 });
@@ -17,7 +26,7 @@ describe("Online", () => {
   beforeEach(() => {
     Object.defineProperty(navigator, "onLine", {
       configurable: true,
-      value: true
+      value: true,
     });
   });
 
@@ -33,7 +42,7 @@ describe("Online", () => {
 
   it("should render children when online and using a custom polling URL", () => {
     const wrapper = mount(
-      <Online pollingUrl="https://www.google.com/">
+      <Online polling={pollingGoogle}>
         <h1>Hello World</h1>
       </Online>
     );
@@ -57,7 +66,7 @@ describe("Online", () => {
     Object.defineProperty(navigator, "onLine", { value: false });
 
     const wrapper = mount(
-      <Online pollingUrl="https://www.google.com/">
+      <Online polling={pollingGoogle}>
         <h1>Hello World</h1>
       </Online>
     );
@@ -86,7 +95,7 @@ describe("Online", () => {
     wrapper.unmount();
 
     expect(window.removeEventListener).toHaveBeenCalledTimes(2);
-    expect(window.removeEventListener.mock.calls).toMatchSnapshot();
+    expect((window.removeEventListener as any).mock.calls).toMatchSnapshot();
   });
 });
 
@@ -94,7 +103,7 @@ describe("Offline", () => {
   beforeEach(() => {
     Object.defineProperty(navigator, "onLine", {
       configurable: true,
-      value: false
+      value: false,
     });
   });
 
@@ -134,7 +143,7 @@ describe("Offline", () => {
     Object.defineProperty(navigator, "onLine", { value: true });
 
     const wrapper = mount(
-      <Offline polling={{ url: "https://www.google.com/" }}>
+      <Offline polling={pollingGoogle}>
         <h1>Hello World</h1>
       </Offline>
     );
@@ -163,6 +172,6 @@ describe("Offline", () => {
     wrapper.unmount();
 
     expect(window.removeEventListener).toHaveBeenCalledTimes(2);
-    expect(window.removeEventListener.mock.calls).toMatchSnapshot();
+    expect((window.removeEventListener as any).mock.calls).toMatchSnapshot();
   });
 });

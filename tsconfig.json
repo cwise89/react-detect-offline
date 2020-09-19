@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "ES6"
+  },
+  "exclude": ["**/*.spec.*"]
+}
