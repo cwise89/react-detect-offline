@@ -1,7 +1,5 @@
-import React from "react";
 import { useOnlineStatus, needPolling } from "./useOnlineStatus";
-import { Wrapper } from "./Wrapper";
-export const Online = ({ children, polling = needPolling, onChange, wrapperType, }) => {
+export const Online = ({ children, polling = needPolling, onChange, }) => {
     const online = useOnlineStatus(polling, onChange);
-    return online ? (React.createElement(Wrapper, { wrapperType: wrapperType }, children)) : null;
+    return online ? children : null;
 };

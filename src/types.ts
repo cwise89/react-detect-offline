@@ -12,5 +12,4 @@ export type BaseProps = {
   children?: React.ReactNode;
   onChange?: (online: boolean) => void;
   polling?: Polling;
-  wrapperType?: string;
 };
