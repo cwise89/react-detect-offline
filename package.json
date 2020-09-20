@@ -3,6 +3,8 @@
   "version": "2.4.0",
   "description": "Offline and Online components for React",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chrisbolin/react-detect-offline.git"

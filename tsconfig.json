@@ -4,7 +4,8 @@
     "jsx": "react",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "target": "ES6"
+    "target": "ES6",
+    "declaration": true
   },
   "exclude": ["**/*.spec.*"]
 }
