@@ -5,12 +5,18 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chrisbolin/react-detect-offline.git"
+    "url": "git+https://github.com/cwise89/react-detect-offline.git"
   },
   "files": [
     "/dist/"
   ],
   "author": "Chris Bolin",
+  "contributors": [
+    {
+      "name": "Cody Wise",
+      "email": "clwise1989@gmail.com"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -35,9 +41,9 @@
     "react-test-renderer": "^15.6.1"
   },
   "bugs": {
-    "url": "https://github.com/chrisbolin/react-detect-offline/issues"
+    "url": "https://github.com/cwise89/react-detect-offline/issues"
   },
-  "homepage": "https://github.com/chrisbolin/react-detect-offline#readme",
+  "homepage": "https://github.com/cwise89/react-detect-offline#readme",
   "scripts": {
     "build": "babel src/index.js -o dist/index.js",
     "test": "jest spec",
