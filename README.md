@@ -73,6 +73,8 @@ The [web spec](https://developer.mozilla.org/en-US/docs/Online_and_offline_event
 
 ### Contributing
 
+This package is maintained by [cwise89](https://github.com/cwise89) (and was initially created by [chrisbolin](https://github.com/chrisbolin)).
+
 PRs are welcome!
 
 * Test: `yarn test`
