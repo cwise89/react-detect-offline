@@ -67,5 +67,8 @@
 				"statements": 100
 			}
 		}
+	},
+	"dependencies": {
+		"office-ui-fabric-react": "^7.155.3"
 	}
 }
