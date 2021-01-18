@@ -2,25 +2,16 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
 
-var useState = React.useState, useEffect = React.useEffect;
-var Counter = function (_a) {
-    var count = _a.count, className = _a.className;
-    return (React.createElement("div", { className: "counter " + className },
-        React.createElement("p", { key: count, className: "counter__count " + (className ? className + '__count' : '') }, count)));
-};
-var App = function (_a) {
-    var _b = _a.className, className = _b === void 0 ? '' : _b;
-    var _c = useState(0), count = _c[0], setCount = _c[1];
-    useEffect(function () {
-        var interval = setInterval(function () {
-            if (count > 99)
-                return setCount(0);
-            setCount(count + 1);
-        }, 1000);
-        return function () { return clearInterval(interval); };
-    }, [count, setCount]);
-    return React.createElement(Counter, { className: className, count: count });
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+
+var Online = function (_a) {
+    var children = _a.children;
+    var _b = React.useState(true), isOnline = _b[0], setisOnline = _b[1];
+    setisOnline(true);
+    return isOnline ? React__default['default'].createElement("div", null, children) : null;
 };
 
-exports.default = App;
+exports.Online = Online;
 //# sourceMappingURL=index.js.map
