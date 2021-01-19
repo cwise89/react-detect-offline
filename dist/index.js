@@ -7,25 +7,10 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 const Online = ({ children }) => {
+    console.log('FIRED');
     useOnlineEffect(() => {
         console.log('FINGERS CROSSED');
     });
-    const goOnline = () => {
-        console.log('FIRED ONLINE!');
-    };
-    const goOffline = () => {
-        console.log('FIRED OFFLINE!');
-    };
-    React.useEffect(() => {
-        window.addEventListener('online', goOnline);
-        window.addEventListener('offline', goOffline);
-        // if (polling) startPolling();
-        return () => {
-            window.removeEventListener('online', goOnline);
-            window.removeEventListener('offline', goOffline);
-            // stopPolling();
-        };
-    }, []);
     return  React__default['default'].createElement("div", null, children) ;
 };
 const useOnlineEffect = callback => {
@@ -37,8 +22,16 @@ const useOnlineEffect = callback => {
         console.log('FIRED OFFLINE!');
         callback();
     };
-    goOffline();
-    goOnline();
+    React.useEffect(() => {
+        window.addEventListener('online', goOnline);
+        window.addEventListener('offline', goOffline);
+        // if (polling) startPolling();
+        return () => {
+            window.removeEventListener('online', goOnline);
+            window.removeEventListener('offline', goOffline);
+            // stopPolling();
+        };
+    }, []);
 };
 
 exports.Online = Online;
