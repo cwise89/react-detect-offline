@@ -1,9 +1,49 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 
 export const Online: FunctionComponent = ({ children }) => {
-	const [isOnline, setisOnline] = useState(true);
+	useOnlineEffect(() => {
+		console.log('FINGERS CROSSED');
+	});
 
-	setisOnline(true);
+	const goOnline = () => {
+		console.log('FIRED ONLINE!');
+	};
 
-	return isOnline ? <div>{children}</div> : null;
+	const goOffline = () => {
+		console.log('FIRED OFFLINE!');
+	};
+
+	useEffect(() => {
+		window.addEventListener('online', goOnline);
+		window.addEventListener('offline', goOffline);
+
+		// if (polling) startPolling();
+
+		return () => {
+			window.removeEventListener('online', goOnline);
+			window.removeEventListener('offline', goOffline);
+			// stopPolling();
+		};
+	}, []);
+	return true ? <div>{children}</div> : null;
+};
+
+export type UseOnlineEffectType = (
+	callback: () => void
+	// {}: ?{ polling: boolean }
+) => void;
+
+export const useOnlineEffect: UseOnlineEffectType = callback => {
+	const goOnline = () => {
+		console.log('FIRED ONLINE!');
+		callback();
+	};
+
+	const goOffline = () => {
+		console.log('FIRED OFFLINE!');
+		callback();
+	};
+
+	goOffline();
+	goOnline();
 };
