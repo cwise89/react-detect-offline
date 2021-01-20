@@ -1,10 +1,6 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var React = require('react');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var react = require('react');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -44,20 +40,6 @@ function __rest(s, e) {
     return t;
 }
 
-var Online = function (_a) {
-    var children = _a.children;
-    useOnlineEffect(function (online) {
-        console.log('FINGERS CROSSED: ', online);
-    }, {
-        enabled: true,
-        timeout: 1000,
-        interval: 1000,
-    });
-    return  React__default['default'].createElement("div", null, children) ;
-};
-// TODO: add polling default props.
-// TODO: add polling implementation.
-// TODO: start useOnline hook.
 var needsPolling = function (navigator) {
     // these browsers don't fully support navigator.onLine, so we need to use a polling backup
     var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
@@ -99,7 +81,8 @@ var getPollingConfigs = function (pollingConfig, needsPolling) {
     };
     console.log('getPollingConfig- needsPolling: ', needsPolling);
     console.log('typeof pollingConfig: ', pollingConfig, typeof pollingConfig === 'object');
-    if (needsPolling === true && typeof pollingConfig === 'object') {
+    if ((needsPolling && typeof pollingConfig === 'object') ||
+        typeof pollingConfig === 'object') {
         return __assign(__assign({}, defaultConfig), pollingConfig);
     }
     else if (pollingConfig === true) {
@@ -120,7 +103,7 @@ var useOnlineEffect = function (callback, pollingOptions) {
     };
     var mustPoll = needsPolling(navigator);
     var _a = getPollingConfigs(pollingOptions, mustPoll), enabled = _a.enabled, pingConfig = __rest(_a, ["enabled"]);
-    React.useEffect(function () {
+    react.useEffect(function () {
         window.addEventListener('online', goOnline);
         window.addEventListener('offline', goOffline);
         var intervalId;
@@ -147,7 +130,6 @@ var useOnlineEffect = function (callback, pollingOptions) {
     }, []);
 };
 
-exports.Online = Online;
 exports.needsPolling = needsPolling;
 exports.ping = ping;
 exports.useOnlineEffect = useOnlineEffect;

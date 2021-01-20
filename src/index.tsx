@@ -1,28 +1,10 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
 	PingType,
 	IsPollingType,
 	GetPollingConfigType,
 	UseOnlineEffectType,
 } from './types';
-
-export const Online: FunctionComponent = ({ children }) => {
-	useOnlineEffect(
-		online => {
-			console.log('FINGERS CROSSED: ', online);
-		},
-		{
-			enabled: true,
-			timeout: 1000,
-			interval: 1000,
-		}
-	);
-	return true ? <div>{children}</div> : null;
-};
-
-// TODO: add polling default props.
-// TODO: add polling implementation.
-// TODO: start useOnline hook.
 
 export const needsPolling: IsPollingType = navigator => {
 	// these browsers don't fully support navigator.onLine, so we need to use a polling backup
@@ -80,7 +62,7 @@ const getPollingConfigs: GetPollingConfigType = (
 		typeof pollingConfig === 'object'
 	);
 
-	if (needsPolling === true && typeof pollingConfig === 'object') {
+	if (needsPolling && typeof pollingConfig === 'object') {
 		return { ...defaultConfig, ...pollingConfig };
 	} else if (pollingConfig === true) {
 		console.log('FIRED', { ...defaultConfig });
