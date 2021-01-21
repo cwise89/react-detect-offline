@@ -81,8 +81,7 @@ var getPollingConfigs = function (pollingConfig, needsPolling) {
     };
     console.log('getPollingConfig- needsPolling: ', needsPolling);
     console.log('typeof pollingConfig: ', pollingConfig, typeof pollingConfig === 'object');
-    if ((needsPolling && typeof pollingConfig === 'object') ||
-        typeof pollingConfig === 'object') {
+    if (needsPolling && typeof pollingConfig === 'object') {
         return __assign(__assign({}, defaultConfig), pollingConfig);
     }
     else if (pollingConfig === true) {

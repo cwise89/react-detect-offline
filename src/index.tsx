@@ -62,11 +62,12 @@ const getPollingConfigs: GetPollingConfigType = (
 		typeof pollingConfig === 'object'
 	);
 
-	if (needsPolling && typeof pollingConfig === 'object') {
+	if (
+		(typeof pollingConfig === 'object' && pollingConfig.enabled === true) ||
+		(needsPolling === true && typeof pollingConfig === 'object')
+	) {
 		return { ...defaultConfig, ...pollingConfig };
-	} else if (pollingConfig === true) {
-		console.log('FIRED', { ...defaultConfig });
-
+	} else if (pollingConfig === true || needsPolling) {
 		return { ...defaultConfig };
 	} else {
 		return { enabled: false };
