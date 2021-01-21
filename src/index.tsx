@@ -55,18 +55,13 @@ const getPollingConfigs: GetPollingConfigType = (
 		timeout: 5000,
 		interval: 5000,
 	};
-	console.log('getPollingConfig- needsPolling: ', needsPolling);
-	console.log(
-		'typeof pollingConfig: ',
-		pollingConfig,
-		typeof pollingConfig === 'object'
-	);
 
-	if (needsPolling && typeof pollingConfig === 'object') {
+	if (
+		(typeof pollingConfig === 'object' && pollingConfig.enabled === true) ||
+		(needsPolling === true && typeof pollingConfig === 'object')
+	) {
 		return { ...defaultConfig, ...pollingConfig };
-	} else if (pollingConfig === true) {
-		console.log('FIRED', { ...defaultConfig });
-
+	} else if (pollingConfig === true || needsPolling) {
 		return { ...defaultConfig };
 	} else {
 		return { enabled: false };
@@ -85,24 +80,28 @@ export const useOnlineEffect: UseOnlineEffectType = (
 		callback(false);
 	};
 
+	// does the browser support navigator.onLine CORRECTLY?
 	const mustPoll = needsPolling(navigator);
+
 	const { enabled, ...pingConfig } = getPollingConfigs(
 		pollingOptions,
 		mustPoll
 	);
 
 	useEffect(() => {
+		// initial online event fired.
+		callback(true);
+
 		window.addEventListener('online', goOnline);
 		window.addEventListener('offline', goOffline);
 
+		// initialize setInterval id so we can clean up on unmount.
 		let intervalId: number | undefined;
-		console.log('IF- mustPoll: ', mustPoll);
-		console.log('IF- enabled: ', enabled);
-		console.log('IF- pingConfig: ', 'url' in pingConfig);
 
+		// if we are polling for online status, set up the setInterval.
 		if ((mustPoll || enabled) && 'url' in pingConfig) {
 			const { url, timeout, interval } = pingConfig;
-			console.log('FIRED SET INTERVAL', pingConfig);
+
 			setInterval(() => {
 				ping({
 					url,
@@ -114,6 +113,7 @@ export const useOnlineEffect: UseOnlineEffectType = (
 		return () => {
 			window.removeEventListener('online', goOnline);
 			window.removeEventListener('offline', goOffline);
+
 			if (mustPoll || enabled) {
 				clearInterval(intervalId);
 			}

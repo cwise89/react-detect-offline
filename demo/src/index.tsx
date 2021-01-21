@@ -10,6 +10,9 @@ ReactDOM.render(
 );
 
 function App() {
-	useOnlineEffect(online => console.log('fired from demo', online), true);
+	useOnlineEffect(online => console.log('fired from demo', online), {
+		timeout: 5000,
+		interval: 1000,
+	});
 	return <div>Hello OSS!</div>;
 }

@@ -10,12 +10,9 @@
 	"files": [
 		"dist"
 	],
-	"author": "Chris Bolin",
-	"contributors": [
-		{
-			"name": "Cody Wise",
-			"email": "clwise1989@gmail.com"
-		}
+	"authors": [
+		"Chris Bolin",
+		"Cody Wise"
 	],
 	"license": "MIT",
 	"devDependencies": {

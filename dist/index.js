@@ -79,14 +79,11 @@ var getPollingConfigs = function (pollingConfig, needsPolling) {
         timeout: 5000,
         interval: 5000,
     };
-    console.log('getPollingConfig- needsPolling: ', needsPolling);
-    console.log('typeof pollingConfig: ', pollingConfig, typeof pollingConfig === 'object');
-    if ((needsPolling && typeof pollingConfig === 'object') ||
-        typeof pollingConfig === 'object') {
+    if ((typeof pollingConfig === 'object' && pollingConfig.enabled === true) ||
+        (needsPolling === true && typeof pollingConfig === 'object')) {
         return __assign(__assign({}, defaultConfig), pollingConfig);
     }
-    else if (pollingConfig === true) {
-        console.log('FIRED', __assign({}, defaultConfig));
+    else if (pollingConfig === true || needsPolling) {
         return __assign({}, defaultConfig);
     }
     else {
@@ -101,18 +98,19 @@ var useOnlineEffect = function (callback, pollingOptions) {
     var goOffline = function () {
         callback(false);
     };
+    // does the browser support navigator.onLine CORRECTLY?
     var mustPoll = needsPolling(navigator);
     var _a = getPollingConfigs(pollingOptions, mustPoll), enabled = _a.enabled, pingConfig = __rest(_a, ["enabled"]);
     react.useEffect(function () {
+        // initial online event fired.
+        callback(true);
         window.addEventListener('online', goOnline);
         window.addEventListener('offline', goOffline);
+        // initialize setInterval id so we can clean up on unmount.
         var intervalId;
-        console.log('IF- mustPoll: ', mustPoll);
-        console.log('IF- enabled: ', enabled);
-        console.log('IF- pingConfig: ', 'url' in pingConfig);
+        // if we are polling for online status, set up the setInterval.
         if ((mustPoll || enabled) && 'url' in pingConfig) {
             var url_1 = pingConfig.url, timeout_1 = pingConfig.timeout, interval = pingConfig.interval;
-            console.log('FIRED SET INTERVAL', pingConfig);
             setInterval(function () {
                 ping({
                     url: url_1,
