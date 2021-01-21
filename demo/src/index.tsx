@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useOnlineEffect } from 'react-detect-offline';
+import { useOnlineEffect } from '../../dist/index';
 
 ReactDOM.render(
 	<React.StrictMode>
