@@ -52,7 +52,7 @@ const defaultProps = {
 
 const defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://ipv4.icanhazip.com/",
+  url: "https://api.ipify.org/?format=json",
   timeout: 5000,
   interval: 5000
 };
