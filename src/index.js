@@ -52,7 +52,7 @@ const defaultProps = {
 
 const defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://api.ipify.org/?format=json",
+  url: "https://www.swapi.tech/api/",
   timeout: 5000,
   interval: 5000
 };
