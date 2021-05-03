@@ -54,7 +54,7 @@ var ping = function ping(_ref) {
       }
     };
 
-    xhr.open("HEAD", url);
+    xhr.open("GET", url);
     xhr.timeout = timeout;
     xhr.send();
   });
@@ -78,7 +78,7 @@ var defaultProps = {
 
 var defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://www.swapi.tech/api/",
+  url: "https://httpbin.org/get",
   timeout: 5000,
   interval: 5000
 };
