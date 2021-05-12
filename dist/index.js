@@ -78,7 +78,7 @@ var defaultProps = {
 
 var defaultPollingConfig = {
   enabled: inBrowser && unsupportedUserAgentsPattern.test(navigator.userAgent),
-  url: "https://www.swapi.tech/api/",
+  url: "https://ipv4.icanhazip.com",
   timeout: 5000,
   interval: 5000
 };
