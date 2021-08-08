@@ -5,6 +5,12 @@ import {
 	GetPollingConfigType,
 	UseOnlineEffectType,
 } from './types';
+declare global {
+    interface Window { _useOnlineEffect_: undefined | { 
+		pingerExist: boolean;
+		callbackList: Array<(online: boolean) => void>
+	}; }
+}
 
 export const needsPolling: IsPollingType = navigator => {
 	// these browsers don't fully support navigator.onLine, so we need to use a polling backup
@@ -95,18 +101,32 @@ export const useOnlineEffect: UseOnlineEffectType = (
 		window.addEventListener('online', goOnline);
 		window.addEventListener('offline', goOffline);
 
+
 		// initialize setInterval id so we can clean up on unmount.
 		let intervalId: number | undefined;
 
-		// if we are polling for online status, set up the setInterval.
 		if ((mustPoll || enabled) && 'url' in pingConfig) {
-			const { url, timeout, interval } = pingConfig;
+			if(!window._useOnlineEffect_?.pingerExist) {
+				window._useOnlineEffect_ = {
+					pingerExist: true,
+					callbackList: [ callback ]
+				}
+			}else {
+				window._useOnlineEffect_.callbackList = [callback, ...window._useOnlineEffect_?.callbackList]
+			}
 
+			const { url, timeout, interval } = pingConfig;
 			setInterval(() => {
 				ping({
 					url,
 					timeout,
-				}).then(online => (online ? goOnline() : goOffline()));
+				}).then(online => {
+					console.log("CALLBACKS: ", window._useOnlineEffect_?.callbackList);
+					window._useOnlineEffect_?.callbackList.forEach(cb => {
+						online ? cb(true) : cb(false)
+
+					});
+				});
 			}, interval);
 		}
 

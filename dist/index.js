@@ -40,6 +40,14 @@ function __rest(s, e) {
     return t;
 }
 
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
 var needsPolling = function (navigator) {
     // these browsers don't fully support navigator.onLine, so we need to use a polling backup
     var unsupportedUserAgentsPattern = /Windows.*Chrome|Windows.*Firefox|Linux.*Chrome/;
@@ -102,20 +110,35 @@ var useOnlineEffect = function (callback, pollingOptions) {
     var mustPoll = needsPolling(navigator);
     var _a = getPollingConfigs(pollingOptions, mustPoll), enabled = _a.enabled, pingConfig = __rest(_a, ["enabled"]);
     react.useEffect(function () {
+        var _a, _b;
         // initial online event fired.
         callback(true);
         window.addEventListener('online', goOnline);
         window.addEventListener('offline', goOffline);
         // initialize setInterval id so we can clean up on unmount.
         var intervalId;
-        // if we are polling for online status, set up the setInterval.
         if ((mustPoll || enabled) && 'url' in pingConfig) {
+            if (!((_a = window._useOnlineEffect_) === null || _a === void 0 ? void 0 : _a.pingerExist)) {
+                window._useOnlineEffect_ = {
+                    pingerExist: true,
+                    callbackList: [callback]
+                };
+            }
+            else {
+                window._useOnlineEffect_.callbackList = __spreadArrays([callback], (_b = window._useOnlineEffect_) === null || _b === void 0 ? void 0 : _b.callbackList);
+            }
             var url_1 = pingConfig.url, timeout_1 = pingConfig.timeout, interval = pingConfig.interval;
             setInterval(function () {
                 ping({
                     url: url_1,
                     timeout: timeout_1,
-                }).then(function (online) { return (online ? goOnline() : goOffline()); });
+                }).then(function (online) {
+                    var _a, _b;
+                    console.log("CALLBACKS: ", (_a = window._useOnlineEffect_) === null || _a === void 0 ? void 0 : _a.callbackList);
+                    (_b = window._useOnlineEffect_) === null || _b === void 0 ? void 0 : _b.callbackList.forEach(function (cb) {
+                        online ? cb(true) : cb(false);
+                    });
+                });
             }, interval);
         }
         return function () {
