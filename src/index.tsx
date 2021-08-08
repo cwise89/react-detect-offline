@@ -116,7 +116,7 @@ export const useOnlineEffect: UseOnlineEffectType = (
 			}
 
 			const { url, timeout, interval } = pingConfig;
-			setInterval(() => {
+			intervalId = setInterval(() => {
 				ping({
 					url,
 					timeout,
