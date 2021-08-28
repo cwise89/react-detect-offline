@@ -16,5 +16,5 @@ function App() {
 			<One />
 			<Two />
 		</div>
-	)
+	);
 }

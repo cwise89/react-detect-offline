@@ -5,7 +5,7 @@ export interface IPingArgs {
 	timeout: number;
 }
 
-export type PingType = ({}: IPingArgs) => Promise<boolean>;
+export type PingType = ({}: IPingArgs) => Promise<void>;
 
 export interface IPollingConfig {
 	enabled?: boolean;

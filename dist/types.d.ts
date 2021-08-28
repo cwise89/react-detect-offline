@@ -3,7 +3,7 @@ export interface IPingArgs {
     url: string;
     timeout: number;
 }
-export declare type PingType = ({}: IPingArgs) => Promise<boolean>;
+export declare type PingType = ({}: IPingArgs) => Promise<void>;
 export interface IPollingConfig {
     enabled?: boolean;
     url?: string;

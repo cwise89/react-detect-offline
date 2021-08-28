@@ -59,9 +59,9 @@ var needsPolling = function (navigator) {
 };
 var ping = function (_a) {
     var url = _a.url, timeout = _a.timeout;
-    return new Promise(function (resolve) {
-        var isOnline = function () { return resolve(true); };
-        var isOffline = function () { return resolve(false); };
+    return new Promise(function (resolve, reject) {
+        var isOnline = function () { return resolve(); };
+        var isOffline = function () { return reject(); };
         var xhr = new XMLHttpRequest();
         xhr.onerror = isOffline;
         xhr.ontimeout = isOffline;
@@ -128,15 +128,21 @@ var useOnlineEffect = function (callback, pollingOptions) {
                 window._useOnlineEffect_.callbackList = __spreadArrays([callback], (_b = window._useOnlineEffect_) === null || _b === void 0 ? void 0 : _b.callbackList);
             }
             var url_1 = pingConfig.url, timeout_1 = pingConfig.timeout, interval = pingConfig.interval;
-            setInterval(function () {
+            intervalId = setInterval(function () {
                 ping({
                     url: url_1,
                     timeout: timeout_1,
-                }).then(function (online) {
+                }).then(function () {
                     var _a, _b;
                     console.log("CALLBACKS: ", (_a = window._useOnlineEffect_) === null || _a === void 0 ? void 0 : _a.callbackList);
                     (_b = window._useOnlineEffect_) === null || _b === void 0 ? void 0 : _b.callbackList.forEach(function (cb) {
-                        online ? cb(true) : cb(false);
+                        cb(true);
+                    });
+                }).catch(function () {
+                    var _a, _b;
+                    console.log("CALLBACKS: ", (_a = window._useOnlineEffect_) === null || _a === void 0 ? void 0 : _a.callbackList);
+                    (_b = window._useOnlineEffect_) === null || _b === void 0 ? void 0 : _b.callbackList.forEach(function (cb) {
+                        cb(false);
                     });
                 });
             }, interval);

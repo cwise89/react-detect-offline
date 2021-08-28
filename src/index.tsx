@@ -27,9 +27,9 @@ export const needsPolling: IsPollingType = navigator => {
 };
 
 export const ping: PingType = ({ url, timeout }) => {
-	return new Promise(resolve => {
-		const isOnline = () => resolve(true);
-		const isOffline = () => resolve(false);
+	return new Promise((resolve, reject) => {
+		const isOnline = () => resolve();
+		const isOffline = () => reject();
 
 		const xhr = new XMLHttpRequest();
 
@@ -120,11 +120,15 @@ export const useOnlineEffect: UseOnlineEffectType = (
 				ping({
 					url,
 					timeout,
-				}).then(online => {
+				}).then(() => {
 					console.log("CALLBACKS: ", window._useOnlineEffect_?.callbackList);
 					window._useOnlineEffect_?.callbackList.forEach(cb => {
-						online ? cb(true) : cb(false)
-
+						cb(true)
+					});
+				}).catch(() => {
+					console.log("CALLBACKS: ", window._useOnlineEffect_?.callbackList);
+					window._useOnlineEffect_?.callbackList.forEach(cb => {
+						cb(false)
 					});
 				});
 			}, interval);
