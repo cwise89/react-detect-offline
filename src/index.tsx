@@ -138,6 +138,8 @@ export const useOnlineEffect: UseOnlineEffectType = (
 
 			if (mustPoll || enabled) {
 				clearInterval(intervalId);
+
+				delete window[hashedConfig];
 			}
 		};
 	}, []);
