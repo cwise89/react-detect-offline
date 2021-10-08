@@ -16,6 +16,7 @@ export declare type GetPollingConfigType = (pollingConfig: IPollingConfig | bool
     url: string;
     timeout: number;
     interval: number;
+    callback?: (online: boolean) => void;
 } | {
     enabled: false;
 };

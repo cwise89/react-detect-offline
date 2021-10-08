@@ -101,38 +101,36 @@ export const useOnlineEffect: UseOnlineEffectType = (
 		window.addEventListener('online', goOnline);
 		window.addEventListener('offline', goOffline);
 
+		pingConfig['callback'] = callback;
 
 		// initialize setInterval id so we can clean up on unmount.
 		let intervalId: number | undefined;
 
-		if ((mustPoll || enabled) && 'url' in pingConfig) {
-			if(!window._useOnlineEffect_?.pingerExist) {
-				window._useOnlineEffect_ = {
-					pingerExist: true,
-					callbackList: [ callback ]
-				}
-			}else {
-				window._useOnlineEffect_.callbackList = [callback, ...window._useOnlineEffect_?.callbackList]
-			}
+		// hash config for key to store our actual config.
+    const hashedConfig: string = JSON.stringify({
+      ...pingConfig,
+      callback: pingConfig["callback"] + "",
+    });
 
-			const { url, timeout, interval } = pingConfig;
-			intervalId = setInterval(() => {
-				ping({
-					url,
-					timeout,
-				}).then(() => {
-					console.log("CALLBACKS: ", window._useOnlineEffect_?.callbackList);
-					window._useOnlineEffect_?.callbackList.forEach(cb => {
-						cb(true)
-					});
-				}).catch(() => {
-					console.log("CALLBACKS: ", window._useOnlineEffect_?.callbackList);
-					window._useOnlineEffect_?.callbackList.forEach(cb => {
-						cb(false)
-					});
-				});
-			}, interval);
-		}
+    if ((mustPoll || enabled) && "url" in pingConfig && !window[hashedConfig]) {
+      window[hashedConfig] = { ...pingConfig };
+
+      const { url, timeout, interval, callback } = window[hashedConfig];
+      intervalId = setInterval(async () => {
+        try {
+          await ping({
+            url,
+            timeout,
+          });
+
+          console.log("CALLBACK: ", callback);
+          callback(true);
+        } catch (error) {
+          console.log("CALLBACK: ", callback);
+          callback(false);
+        }
+      }, interval);
+    }
 
 		return () => {
 			window.removeEventListener('online', goOnline);

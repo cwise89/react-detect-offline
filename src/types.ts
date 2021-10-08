@@ -28,6 +28,7 @@ export type GetPollingConfigType = (
 			url: string;
 			timeout: number;
 			interval: number;
+			callback?: (online: boolean) => void;
 	  }
 	| {
 			enabled: false;
